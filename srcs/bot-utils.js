@@ -111,7 +111,7 @@ const toSnakeCase = (camelCase) => {
 
 /**
  * @description Assign Objects into one Object which keys are all transfered into snake_case.
- * @param {...Objects}
+ * @param {...Object}
  * @return {Object} Assigned snake_case Object.
  */
 const toSnakeCaseObject = (...objects) => {
@@ -124,7 +124,7 @@ const toSnakeCaseObject = (...objects) => {
 
 /**
  * @description Assign Objects into one FormData which keys are all transfered into snake_case.
- * @param {...Objects}
+ * @param {...Object}
  * @return {FormData} Assigned snake_case FormData.
  */
 const toSnakeCaseFormData = (...objects) => {

@@ -5,7 +5,6 @@
   "main": "srcs/index.js",
   "scripts": {
     "build:doc": "jsdoc -c jsdoc.json -R README.md",
-    "prepare": "npm run build:doc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
