@@ -3,8 +3,366 @@
  */
 const fs = require('fs')
 const path = require('path')
+const https = require('https')
 
-const FormData = require('form-data')
+/**
+ * @description A helper class for uploading file.
+ * @example
+ * new InputFile(path)
+ */
+class InputFile {
+  /**
+   * @param {String} filepath
+   * @return {InputFile}
+   */
+  constructor(filepath) {
+    this.buffer = fs.readFileSync(filepath)
+    this.filename = path.basename(filepath)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmedia
+ * @example
+ * new InputMedia(type, media)
+ */
+class InputMedia {
+  /**
+   * @param {String} type
+   * @param {(String|InputFile)} media File ID, URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(type, media, opts = {}) {
+    this.type = type
+    this.media = media
+    opts = toSnakeCaseObject(opts)
+    Object.assign(this, opts)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmediaphoto
+ * @example
+ * new InputMediaPhoto(media)
+ */
+class InputMediaPhoto extends InputMedia {
+  /**
+   * @param {(String|InputFile)} media File ID, photo URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(media, opts = {}) {
+    super('photo', media, opts)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmediavideo
+ * @example
+ * new InputMediaVideo(media)
+ */
+class InputMediaVideo extends InputMedia {
+  /**
+   * @param {(String|InputFile)} media File ID, video URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(media, opts = {}) {
+    super('video', media, opts)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmediaanimation
+ * @example
+ * new InputMediaAnimation(media)
+ */
+class InputMediaAnimation extends InputMedia {
+  /**
+   * @param {(String|InputFile)} media File ID, animation URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(media, opts = {}) {
+    super('animation', media, opts)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmediaaudio
+ * @example
+ * new InputMediaAudio(media)
+ */
+class InputMediaAudio extends InputMedia {
+  /**
+   * @param {(String|InputFile)} media File ID, audio URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(media, opts = {}) {
+    super('audio', media, opts)
+  }
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#inputmediadocument
+ * @example
+ * new InputMediaDocument(media)
+ */
+class InputMediaDocument extends InputMedia {
+  /**
+   * @param {(String|InputFile)} media File ID, document URL or InputFile.
+   * @param {Object} [opts] Optional Telegram parameters.
+   * @return {InputMedia}
+   */
+  constructor(media, opts = {}) {
+    super('document', media, opts)
+  }
+}
+
+/**
+ * @description A simple FormData implemention,
+ * does not support mixed files because Telegram Bot API does not use it.
+ * It is designed for upload files,
+ * so don't think you can get your value as original type.
+ * @example
+ * new FormData()
+ */
+class FormData {
+  /**
+   * @return {FormData}
+   */
+  constructor() {
+    this.buffer = null
+    this.boundary = `${Math.random().toString(16)}`
+    this.data = {}
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/append
+   * @param {String} name
+   * @param {(String|Buffer)} value
+   * @param {String} [filename] If you want to upload a file, Telegram Bot API needs this.
+   */
+  append(name, value, filename = null) {
+    name = `${name}`
+    if (!(isString(value) || isBuffer(value))) {
+      value = `${value}`
+    }
+    if (this.data[name] == null) {
+      this.data[name] = []
+    }
+    this.data[name].push({name, value, filename})
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/delete
+   * @param {String} name
+   */
+  delete(name) {
+    if (this.data[name] != null) {
+      delete this.data[name]
+    }
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/get
+   * @param {String} name
+   * @return {(String|Buffer)} Value
+   */
+  get(name) {
+    if (this.data[name] == null) {
+      return null
+    }
+    return this.data[name][0]['value']
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/getAll
+   * @param {String} name
+   * @return {Array} Array of value.
+   */
+  getAll(name) {
+    if (this.data[name] == null) {
+      return null
+    }
+    return this.data[name].map((o) => {
+      return o['value']
+    })
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/append
+   * @param {String} name
+   * @param {(String|Buffer)} value
+   * @param {String} [filename] If you want to upload a file, Telegram Bot API needs this.
+   */
+  set(name, value, filename = null) {
+    name = `${name}`
+    if (!(isSting(value) || isBuffer(value))) {
+      value = `${value}`
+    }
+    this.data[name] = [{name, value, filename}]
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/has
+   * @param {String} name
+   * @return {Boolean}
+   */
+  has(name) {
+    return this.data[name] != null
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/keys
+   * @return {Iterator<String>}
+   */
+  *keys() {
+    for (const key of Object.keys(this.data)) {
+      yield key
+    }
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/values
+   * @return {Iterator<(String|Buffer)>}
+   */
+  *values() {
+    for (const value of Object.values(this.data).reduce((acc, curr) => {
+      return acc.concat(curr.map((o) => {
+        return o['value']
+      }))
+    })) {
+      yield value
+    }
+  }
+
+  /**
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/entries
+   * @return {Iterator<String, (String|Buffer)>}
+   */
+  *entries() {
+    for (const entries of Object.entries(this.data).reduce((acc, curr) => {
+      return acc.concat(curr[1].map((o) => {
+        return [curr[0], o['value']]
+      }))
+    })) {
+      yield entries
+    }
+  }
+
+  /**
+   * @description Get a buffer that can be written to http requests.
+   * @return {Buffer}
+   */
+  getBuffer() {
+    const array = []
+    for (const [name, values] of Object.entries(this.data)) {
+      for (const o of values) {
+        array.push(`\r\n--${this.boundary}\r\n`)
+        array.push(`Content-Disposition: form-data; name="${name}"`)
+        if (o['filename'] != null) {
+          array.push(`; filename="${o['filename']}"`)
+        }
+        array.push(`\r\n\r\n`)
+        array.push(o['value'])
+      }
+    }
+    array.push(`\r\n--${this.boundary}--`)
+    this.buffer = Buffer.concat(array.map(Buffer.from))
+    return this.buffer
+  }
+
+  /**
+   * @description Get buffer length, you'd better call `getBuffer()` first.
+   * @return {Number}
+   */
+  getLength() {
+    if (this.buffer == null) {
+      this.getBuffer()
+    }
+    return this.buffer.length
+  }
+
+  /**
+   * @description Get headers for buffer that can be past to http requests,
+   * you'd better call `getBuffer()` first.
+   * @return {Buffer}
+   */
+  getHeaders() {
+    return {
+      'Content-Type': `multipart/form-data; boundary=${this.boundary}`,
+      "Transfer-Encoding": "chunked",
+      "Content-Length": this.getLength()
+    }
+  }
+}
+
+/**
+ * @param {String} url Target URL.
+ * @param {(String|Buffer|Object)} body Object will be JSON-serialized.
+ * @param {Object} [headers]
+ * @return {Promise<String>}
+ */
+const get = (url, headers = {}) => {
+  const opts = {
+    'method': 'GET',
+    'timeout': 1500,
+    'headers': {}
+  }
+  for (const [k, v] of Object.entries(headers)) {
+    opts['headers'][k.toLowerCase()] = v
+  }
+  return new Promise((resolve, reject) => {
+    const chunks = []
+    const req = https.request(url, opts, (res) => {
+      res.on("data", (chunk) => {
+        chunks.push(chunk)
+      })
+      res.on("end", () => {
+        resolve(Buffer.concat(chunks).toString("utf8"))
+      })
+    }).on('error', reject)
+    req.end()
+  })
+}
+
+/**
+ * @param {String} url Target URL.
+ * @param {(String|Buffer|Object)} body Object will be JSON-serialized.
+ * @param {Object} [headers]
+ * @return {Promise<String>}
+ */
+const post = (url, body, headers = {}) => {
+  const opts = {
+    'method': 'POST',
+    'timeout': 1500,
+    'headers': {}
+  }
+  for (const [k, v] of Object.entries(headers)) {
+    opts['headers'][k.toLowerCase()] = v
+  }
+  if (!(isBuffer(body) || isString(body))) {
+    body = JSON.stringify(body)
+    opts['headers']['content-type'] = 'application/json'
+    opts['headers']['content-length'] = `${Buffer.byteLength(body)}`
+  }
+  return new Promise((resolve, reject) => {
+    const chunks = []
+    const req = https.request(url, opts, (res) => {
+      res.on("data", (chunk) => {
+        chunks.push(chunk)
+      })
+      res.on("end", () => {
+        resolve(Buffer.concat(chunks).toString("utf8"))
+      })
+    }).on('error', reject)
+    req.write(body)
+    req.end()
+  })
+}
 
 /**
  * @param {Object} update Telegram update.
@@ -129,15 +487,34 @@ const toSnakeCaseObject = (...objects) => {
  */
 const toSnakeCaseFormData = (...objects) => {
   const formData = new FormData()
-  for (let object of objects) {
-    for (let entry of Object.entries) {
-      formData.append(toSnakeCase(entry[0]), entry[1])
+  for (const object of objects) {
+    for (const entry of Object.entries(object)) {
+      if (isObject(entry[1])) {
+        // Append with a filename
+        formData.append(
+          toSnakeCase(entry[0]),
+          entry[1]['buffer'],
+          entry[1]['filename']
+        )
+      } else {
+        formData.append(toSnakeCase(entry[0]), entry[1])
+      }
     }
   }
   return formData
 }
 
 module.exports = {
+  InputFile,
+  InputMedia,
+  InputMediaPhoto,
+  InputMediaVideo,
+  InputMediaAnimation,
+  InputMediaAudio,
+  InputMediaDocument,
+  FormData,
+  get,
+  post,
   perFromID,
   perChatID,
   isString,

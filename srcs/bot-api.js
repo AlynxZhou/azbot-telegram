@@ -1,9 +1,9 @@
 /**
  * @module BotAPI
  */
-const axios = require('axios')
-
 const {
+  get,
+  post,
   isArray,
   isString,
   isFunction,
@@ -48,16 +48,15 @@ class BotAPI {
     let promise
     if (body != null) {
       if (isFormData(body)) {
-        // https://github.com/axios/axios/issues/2049#issuecomment-503435918
-        promise = axios.post(url, body.getBuffer(), body.getHeaders())
+        promise = post(url, body.getBuffer(), body.getHeaders())
       } else {
-        promise = axios.post(url, body)
+        promise = post(url, body)
       }
     } else {
-      promise = axios.get(url)
+      promise = get(url)
     }
     return promise.then((response) => {
-      let data = response['data']
+      let data = JSON.parse(response)
       if (!data['ok']) {
         throw new Error(
           `Telegram Error: ${data['error_code']} ${data['description']}`,
@@ -103,7 +102,7 @@ class BotAPI {
 
   /**
    * @see https://core.telegram.org/bots/api#getwebhookinfo
-   * @return {Promise} Promise of WebhookInfo.
+   * @return {Promise<WebHookInfo>}
    */
   getWebhookInfo() {
     return this.request('getWebhookInfo')
@@ -111,7 +110,7 @@ class BotAPI {
 
   /**
    * @see https://core.telegram.org/bots/api#getme
-   * @return {Promise} Promise of User.
+   * @return {Promise<User>}
    */
   getMe() {
     return this.request('getMe')
@@ -147,7 +146,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendphoto
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} photo File ID, photo URL or file content.
+   * @param {(String|Object)} photo File ID, photo URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
    * @return {Promise<Message>}
@@ -165,10 +164,10 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendaudio
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} audio File ID, audio URL or file content.
+   * @param {(String|Object)} audio File ID, audio URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
-   * @param {(String|Buffer)} [opts.thumb] Thumb URL or file content.
+   * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
   sendAudio(chatID, audio, opts = {}) {
@@ -184,10 +183,10 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#senddocument
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} document File ID, document URL or file content.
+   * @param {(String|Object)} document File ID, document URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
-   * @param {(String|Buffer)} [opts.thumb] Thumb URL or file content.
+   * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
   sendDocument(chatID, document, opts = {}) {
@@ -204,10 +203,10 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#senddocument
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} video File ID, video URL or file content.
+   * @param {(String|Object)} video File ID, video URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
-   * @param {(String|Buffer)} [opts.thumb] Thumb URL or file content.
+   * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
   sendVideo(chatID, video, opts = {}) {
@@ -224,10 +223,10 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendanimation
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} animation File ID, animation URL or file content.
+   * @param {(String|Object)} animation File ID, animation URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
-   * @param {(String|Buffer)} [opts.thumb] Thumb URL or file content.
+   * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
   sendAnimation(chatID, animation, opts = {}) {
@@ -244,7 +243,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendvoice
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} voice File ID, voice URL or file content.
+   * @param {(String|Object)} voice File ID, voice URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
    * @return {Promise<Message>}
@@ -262,10 +261,10 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendvideonote
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} videoNote File ID, video note URL or file content.
+   * @param {(String|Object)} videoNote File ID, video note URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.replyMarkup] JSON-serialized Object.
-   * @param {(String|Buffer)} [opts.thumb] Thumb URL or file content.
+   * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
   sendVideoNote(chatID, videoNote, opts = {}) {
@@ -282,7 +281,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendmediagroup
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {InputMedia[]} media Set InputMedia.media or InputMedia.thumb to Buffer for uploading a file.
+   * @param {InputMedia[]} media Set `InputMedia.media` or `InputMedia.thumb` to InputFile for uploading a file.
    * @param {Object} [opts] Optional Telegram patameters.
    * @return {Promise<Message>}
    */
@@ -294,12 +293,12 @@ class BotAPI {
     for (let i = 0; i < inputMedia.length; ++i) {
       const input = inputMedia[i]
       const output = toSnakeCaseObject(input)
-      if (isBuffer(input['media'])) {
+      if (isObject(input['media'])) {
         useFormData = true
         opts[`input${i}`] = input['media']
         output['media'] = `attach://input${i}`
       }
-      if (isBuffer(input['thumb'])) {
+      if (isObject(input['thumb'])) {
         useFormData = true
         opts[`inputthumb${i}`] = input['thumb']
         output['thumb'] = `attach://inputthumb${i}`
@@ -438,7 +437,7 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#getuserprofilephotos
    * @param {Number} userID Target Telegram user ID.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @return {Promise} Promise of UserProfilePhotos.
+   * @return {Promise<UserProfilePhotos>}
    */
   getUserProfilePhotos(userID, opts = {}) {
     return this.request(
@@ -450,7 +449,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#getfile
    * @param {(Number|String)} fileID Target Telegram file ID.
-   * @return {Promise} Promise of File.
+   * @return {Promise<File>}
    */
   getFile(fileID) {
     return this.request('getFile', toSnakeCaseObject({fileID}))
@@ -525,7 +524,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#exportchatinvitelink
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @return {Promise} Promise of String.
+   * @return {Promise<String>}
    */
   exportChatInviteLink(chatID) {
     return this.request('exportChatInviteLink', toSnakeCaseObject({chatID}))
@@ -534,7 +533,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#setchatphoto
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {Buffer} photo Photo file content.
+   * @param {Object} photo InputFile.
    * @return {Promise<Boolean>}
    */
   setChatPhoto(chatID, photo) {
@@ -608,7 +607,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#getchat
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @return {Promise} Promise of Chat.
+   * @return {Promise<Chat>}
    */
   getChat(chatID) {
     return this.request('getChat', toSnakeCaseObject({chatID}))
@@ -626,7 +625,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#getchatmemberscount
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @return {Promise} Promise of Number.
+   * @return {Promise<Number>}
    */
   getChatMembersCount(chatID) {
     return this.request('getChatMembersCount', toSnakeCaseObject({chatID}))
@@ -636,7 +635,7 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#getchatmember
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {Number} userID Target Telegram user ID.
-   * @return {Promise} Promise of ChatMember.
+   * @return {Promise<ChatMember>}
    */
   getChatMember(chatID, userID) {
     return this.request('getChatMember', toSnakeCaseObject({chatID, userID}))
@@ -732,12 +731,12 @@ class BotAPI {
     const input = media
     const output = toSnakeCaseObject(input)
     let useFormData = false
-    if (isBuffer(input['media'])) {
+    if (isObject(input['media'])) {
       useFormData = true
       opts[`input${i}`] = input['media']
       output['media'] = `attach://input${i}`
     }
-    if (isBuffer(input['thumb'])) {
+    if (isObject(input['thumb'])) {
       useFormData = true
       opts[`inputthumb${i}`] = input['thumb']
       output['thumb'] = `attach://inputthumb${i}`
@@ -776,7 +775,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(Number|String)} messageID Target Telegram message ID.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @return {Promise} Promise of Poll.
+   * @return {Promise<Poll>}
    */
   stopPoll(chatID, messageID, opts = {}) {
     return this.request(
@@ -801,7 +800,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#sendsticker
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {(String|Buffer)} sticker File ID, sticker URL or file content.
+   * @param {(String|Object)} sticker File ID, sticker URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
    * @return {Promise<Message>}
    */
@@ -818,7 +817,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#getstickerset
    * @param {String} name
-   * @return {Promise} Promise of StickerSet.
+   * @return {Promise<StickerSet>}
    */
   getStickerSet(name) {
     return this.request('getStickerSet', toSnakeCaseObject({name}))
@@ -827,7 +826,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#uploadstickerfile
    * @param {Number} userID Telegram user ID of sticker file.
-   * @param {Buffer} pngSticker Sticker file content.
+   * @param {Object} pngSticker Sticker InputFile.
    * @return {Promise<Message>}
    */
   uploadStickerFile(userID, pngStricker) {
@@ -841,8 +840,8 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#createnewstickerset
    * @param {Number} userID Telegram user ID for created sticker set owner.
    * @param {String} name Short name of sticker set.
-   * @param {(String|Buffer)} title Sticker set title.
-   * @param {(String|Buffer)} pngSticker File ID, sticker URL or file content.
+   * @param {String} title Sticker set title.
+   * @param {(String|Object)} pngSticker File ID, sticker URL or InputFile.
    * @param {String} emojis One or more emoji corresponding to the sticker.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.maskPosition] JSON-serialized MaskPosition.
@@ -868,7 +867,7 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#addstickertoset
    * @param {Number} userID Telegram user ID for sticker set owner.
    * @param {String} name
-   * @param {(String|Buffer)} pngSticker File ID, sticker URL or file content.
+   * @param {(String|Object)} pngSticker File ID, sticker URL or InputFile.
    * @param {String} emojis One or more emoji corresponding to the sticker.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.maskPosition] JSON-serialized MaskPosition.
@@ -1010,7 +1009,7 @@ class BotAPI {
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
-   * @return {Promise} Promise of Message or Boolean or Error.
+   * @return {Promise<Message|Boolean|Error>}
    */
   setGameScore(userID, score, opts = {}) {
     const body = toSnakeCaseObject({userID, score}, opts)

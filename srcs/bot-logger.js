@@ -1,8 +1,6 @@
 /**
  * @module BotLogger
  */
-const colors = require('colors/safe')
-
 /**
  * @description A Logger with colored output.
  * @extends console.Console
@@ -42,7 +40,7 @@ class BotLogger extends console.Console {
    * @param {...*} strs
    */
   info(...strs) {
-    return super.info(colors.blue('INFO:'), ...strs)
+    return super.info('\x1b[34mINFO:\x1b[0m', ...strs)
   }
 
   /**
@@ -50,7 +48,7 @@ class BotLogger extends console.Console {
    */
   debug(...strs) {
     if (this.isDebug) {
-      return super.debug(colors.green('DEBUG:'), ...strs)
+      return super.debug('\x1b[32mDEBUG:\x1b[0m', ...strs)
     }
   }
 
@@ -58,14 +56,14 @@ class BotLogger extends console.Console {
    * @param {...*} strs
    */
   warn(...strs) {
-    return super.warn(colors.yellow('WARN:'), ...strs)
+    return super.warn('\x1b[33mWARN:\x1b[0m', ...strs)
   }
 
   /**
    * @param {...*} strs
    */
   error(...strs) {
-    return super.warn(colors.red('ERROR:'), ...strs)
+    return super.warn('\x1b[31mERROR:\x1b[0m', ...strs)
   }
 }
 
