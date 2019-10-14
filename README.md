@@ -1,8 +1,8 @@
 aztgbot
 =======
 
-Alynx Zhou's Telegram Bot API implemention.
--------------------------------------------
+Alynx Zhou's zero-dependency Telegram Bot API implemention.
+-----------------------------------------------------------
 
 # Usage
 
