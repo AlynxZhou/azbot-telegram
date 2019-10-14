@@ -15,7 +15,13 @@ $ npm i -s aztgbot
 ## Echo Bot with BotMaster and BotServant
 
 ```JavaScript
-const {BotMaster, BotServant, BotAPI, BotLogger, botUtils} = require('aztgbot')
+const {
+  BotMaster,
+  BotServant,
+  BotAPI,
+  BotLogger,
+  botUtils
+} = require('aztgbot')
 
 class EchoBot extends BotServant {
   constructor(botAPI, identifier, botID, botName) {
@@ -47,12 +53,17 @@ new BotMaster(
 ).loop(null, null)
 ```
 
-## Echo Bot with BotPoller Directly
+## Media Bot with BotPoller Directly
 
 ```JavaScript
-const {BotPoller, BotAPI, BotLogger, botUtils} = require('aztgbot')
+const {
+  BotPoller,
+  BotAPI,
+  BotLogger,
+  botUtils
+} = require('aztgbot')
 
-class EchoBot {
+class MediaBot {
   constructor(token) {
     this.botAPI = new BotAPI(token)
     this.botPoller = new BotPoller(this.botAPI, this.onUpdates.bind(this))
@@ -79,14 +90,21 @@ class EchoBot {
       if (update != null &&
           update['message'] != null &&
           update['message']['text'] != null) {
-        await this.botAPI.sendChatAction(update['message']['chat']['id'], 'typing')
-        await this.botAPI.sendMessage(update['message']['chat']['id'], update['message']['text'], {'replyToMessageID': update['message']['message_id']})
+        await this.botAPI.sendChatAction(
+          update['message']['chat']['id'],
+          'typing'
+        )
+        await this.botAPI.sendMediaGroup(update['message']['chat']['id'], [
+          new botUtils.InputMediaPhoto(new botUtils.InputFile('1.png')),
+          new botUtils.InputMediaPhoto(new botUtils.InputFile('2.png')),
+          new botUtils.InputMediaPhoto(new botUtils.InputFile('3.png'))
+        ], {'replyToMessageID': update['message']['message_id']})
       }
     }
   }
 }
 
-new EchoBot(process.argv[2]).loop()
+new MediaBot(process.argv[2]).loop()
 ```
 
 # License
