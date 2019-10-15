@@ -473,11 +473,13 @@ const toSnakeCase = (camelCase) => {
  * @return {Object} Assigned snake_case Object.
  */
 const toSnakeCaseObject = (...objects) => {
-  return Object.assign(...objects.map((object) => {
-    return Object.fromEntries(Object.entries(object).map((entry) => {
-      return [toSnakeCase(entry[0]), entry[1]]
-    }))
-  }))
+  const result = {}
+  for (const object of objects) {
+    for (const entry of Object.entries(object)) {
+      result[toSnakeCase(entry[0])] = entry[1]
+    }
+  }
+  return result
 }
 
 /**
