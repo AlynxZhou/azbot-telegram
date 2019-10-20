@@ -25,6 +25,9 @@ class BotAPI {
    * @return {BotAPI}
    */
   constructor(token) {
+    /**
+     * @property {String} token Telegram Bot token.
+     */
     this.token = token
   }
 
@@ -56,7 +59,7 @@ class BotAPI {
       promise = get(url)
     }
     return promise.then((response) => {
-      let data = JSON.parse(response)
+      let data = JSON.parse(response.toString('utf8'))
       if (!data['ok']) {
         throw new Error(
           `Telegram Error: ${data['error_code']} ${data['description']}`,

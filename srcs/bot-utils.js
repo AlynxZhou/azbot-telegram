@@ -304,7 +304,7 @@ class FormData {
  * @param {String} url Target URL.
  * @param {(String|Buffer|Object)} body Object will be JSON-serialized.
  * @param {Object} [headers]
- * @return {Promise<String>}
+ * @return {Promise<Buffer>}
  */
 const get = (url, headers = {}) => {
   const opts = {
@@ -322,7 +322,7 @@ const get = (url, headers = {}) => {
         chunks.push(chunk)
       })
       res.on("end", () => {
-        resolve(Buffer.concat(chunks).toString("utf8"))
+        resolve(Buffer.concat(chunks))
       })
     }).on('error', reject)
     req.end()
@@ -333,7 +333,7 @@ const get = (url, headers = {}) => {
  * @param {String} url Target URL.
  * @param {(String|Buffer|Object)} body Object will be JSON-serialized.
  * @param {Object} [headers]
- * @return {Promise<String>}
+ * @return {Promise<Buffer>}
  */
 const post = (url, body, headers = {}) => {
   const opts = {
@@ -356,7 +356,7 @@ const post = (url, body, headers = {}) => {
         chunks.push(chunk)
       })
       res.on("end", () => {
-        resolve(Buffer.concat(chunks).toString("utf8"))
+        resolve(Buffer.concat(chunks))
       })
     }).on('error', reject)
     req.write(body)

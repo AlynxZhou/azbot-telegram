@@ -73,7 +73,11 @@ class BotPoller {
     if (!this.isPolling) {
       // By default we skip Updates.
       if (this.skippingUpdates == null || this.skippingUpdates === true) {
-        await this.skipUpdates()
+        try {
+          await this.skipUpdates()
+        } catch (error) {
+          this.botLogger.error(error)
+        }
       }
       this.isPolling = true
       this.pollUpdates()
@@ -86,16 +90,20 @@ class BotPoller {
    * @return {Number} Polling ID.
    */
   async pollUpdates() {
-    const updates = await this.getUpdates()
-    this.onUpdates(updates)
-    let updateID = 0
-    for (let update of updates) {
-      if (updateID < update['update_id']) {
-        updateID = update['update_id']
+    try {
+      const updates = await this.getUpdates()
+      this.onUpdates(updates)
+      let updateID = 0
+      for (let update of updates) {
+        if (updateID < update['update_id']) {
+          updateID = update['update_id']
+        }
       }
-    }
-    if (updateID !== 0) {
-      this.pollingParam['offset'] = updateID + 1
+      if (updateID !== 0) {
+        this.pollingParam['offset'] = updateID + 1
+      }
+    } catch (error) {
+      this.botLogger.error(error)
     }
     this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval)
     return this.pollingID
