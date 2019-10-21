@@ -13,11 +13,17 @@ const https = require('https')
 class InputFile {
   /**
    * @param {String} filepath
+   * @param {Buffer} [buffer] If no buffer provided it will read from file. 
    * @return {InputFile}
    */
-  constructor(filepath) {
-    this.buffer = fs.readFileSync(filepath)
+  constructor(filepath, buffer = null) {
     this.filename = path.basename(filepath)
+    if (buffer == null) {
+      // Read file content from path.
+      this.buffer = fs.readFileSync(filepath)
+    } else {
+      this.buffer = buffer
+    }
   }
 }
 
