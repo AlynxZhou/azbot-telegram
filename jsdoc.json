@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": ["srcs/"]
+    "include": ["aztgbot/"]
   },
   "plugins": ["plugins/markdown"],
   "opts": {

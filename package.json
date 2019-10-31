@@ -2,7 +2,7 @@
   "name": "aztgbot",
   "version": "0.3.2",
   "description": "Alynx Zhou's zero-dependency Telegram Bot API implemention.",
-  "main": "srcs/index.js",
+  "main": "aztgbot/index.js",
   "scripts": {
     "build:doc": "jsdoc -c jsdoc.json -R README.md",
     "test": "echo \"Error: no test specified\" && exit 1"
