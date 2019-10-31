@@ -4,6 +4,11 @@ aztgbot
 Alynx Zhou's zero-dependency Telegram Bot API implemention.
 -----------------------------------------------------------
 
+[![npm-version](https://img.shields.io/npm/v/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
+[![npm-downloads](https://img.shields.io/npm/dt/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
+[![node-version](https://img.shields.io/node/v/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
+[![github-license](https://img.shields.io/github/license/AlynxZhou/aztgbot?style=for-the-badge)](https://github.com/AlynxZhou/aztgbot/blob/master/LICENSE)
+
 # Usage
 
 ```
