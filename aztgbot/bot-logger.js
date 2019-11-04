@@ -33,6 +33,10 @@ class BotLogger extends console.Console {
     this.opts = {}
     this.opts['debug'] = opts['debug'] || false
     this.opts['color'] = opts['color'] == null ? true : opts['color']
+    // Disable colored output if piped.
+    if (!this.opts['stdout'].isTTY || !this.opts['stderr'].isTTY) {
+      this.opts['color'] = false
+    }
   }
 
   /**
@@ -101,7 +105,7 @@ class BotLogger extends console.Console {
    * @param {...*} strs
    */
   info(...strs) {
-    return super.info(this.blue('INFO:'), ...strs)
+    return super.info(`${this.blue('INFO')}:`, ...strs)
   }
 
   /**
@@ -111,9 +115,9 @@ class BotLogger extends console.Console {
     if (this.opts['debug']) {
       // Node.js 8 does not support `console.debug`.
       if (isFunction(super.debug)) {
-        return super.debug(this.green('DEBUG:'), ...strs)
+        return super.debug(`${this.green('DEBUG')}:`, ...strs)
       }
-      return super.log(this.green('DEBUG:'), ...strs)
+      return super.log(`${this.green('DEBUG')}:`, ...strs)
     }
   }
 
@@ -121,14 +125,14 @@ class BotLogger extends console.Console {
    * @param {...*} strs
    */
   warn(...strs) {
-    return super.warn(this.yellow('WARN:'), ...strs)
+    return super.warn(`${this.yellow('WARN')}:`, ...strs)
   }
 
   /**
    * @param {...*} strs
    */
   error(...strs) {
-    return super.error(this.red('ERROR:'), ...strs)
+    return super.error(`${this.red('ERROR')}:`, ...strs)
   }
 }
 
