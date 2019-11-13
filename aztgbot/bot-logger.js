@@ -31,6 +31,8 @@ class BotLogger extends console.Console {
       opts['stderr'] || process.stderr
     )
     this.opts = {}
+    this.opts['stdout'] = opts['stdout'] || process.stdout
+    this.opts['stderr'] = opts['stderr'] || process.stderr
     this.opts['debug'] = opts['debug'] || false
     this.opts['color'] = opts['color'] == null ? true : opts['color']
     // Disable colored output if piped.
