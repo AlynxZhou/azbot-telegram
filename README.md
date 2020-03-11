@@ -118,4 +118,4 @@ Apache-2.0
 
 # Other
 
-Docs: [Here](https://alynx.moe/aztgbot/)
+Docs: [Here](https://tgbot.alynx.one/)
