@@ -48,14 +48,6 @@ class BotMaster {
    * @param {Function} [stopCallback]
    */
   async loop(startCallback, stopCallback) {
-    if (process.platform === 'win32') {
-      require('readline').createInterface({
-        'input': process.stdin,
-        'output': process.stdout
-      }).on('SIGINT', () => {
-        process.emit('SIGINT')
-      })
-    }
     process.on('SIGINT', async () => {
       this.botPoller.stopPollUpdates()
       for (const [identifier, bot] of Object.entries(this.bots)) {
@@ -67,7 +59,7 @@ class BotMaster {
       if (isFunction(stopCallback)) {
         await stopCallback()
       }
-      process.exit()
+      process.exit(0)
     })
     if (isFunction(startCallback)) {
       await startCallback()
