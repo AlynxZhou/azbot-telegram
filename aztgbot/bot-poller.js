@@ -93,6 +93,7 @@ class BotPoller {
    * @return {Number} Polling ID.
    */
   async pollUpdates() {
+    this.botLogger.debug(`poller: polling updates since offset ${this.pollingParam['offset']}…`)
     try {
       const updates = await this.getUpdates()
       this.onUpdates(updates)

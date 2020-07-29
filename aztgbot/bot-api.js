@@ -46,7 +46,7 @@ class BotAPI {
 
   /**
    * @private
-   * @description Warpper for axios requests.
+   * @description Warpper for HTTP requests.
    * @param {String} method Telegram Bot API method.
    * @param {FormData|Object} body Request body.
    * @return {Promise} Promise of Telegram result.
