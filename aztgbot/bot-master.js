@@ -48,7 +48,10 @@ class BotMaster {
    * @param {Function} [stopCallback]
    */
   async loop(startCallback, stopCallback) {
-    process.on('SIGINT', async () => {
+    process.on('SIGINT', () => {
+      process.exit(0)
+    })
+    process.on('exit', async () => {
       this.botPoller.stopPollUpdates()
       for (const [identifier, bot] of Object.entries(this.bots)) {
         if (isFunction(bot['instance'].onRemove)) {
@@ -59,7 +62,6 @@ class BotMaster {
       if (isFunction(stopCallback)) {
         await stopCallback()
       }
-      process.exit(0)
     })
     if (isFunction(startCallback)) {
       await startCallback()
