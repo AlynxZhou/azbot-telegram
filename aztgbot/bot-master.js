@@ -51,13 +51,8 @@ class BotMaster {
   async loop(opts = {}) {
     const startCallback = opts['startCallback'] || null
     const stopCallback = opts['stopCallback'] || null
-    process.on('SIGINT', () => {
-      process.exit(0)
-    })
-    process.on('SIGTERM', () => {
-      process.exit(0)
-    })
-    process.on('exit', async () => {
+    // If we close all scheduled works, Node.js will exit automatically.
+    const cleanup = async () => {
       this.botPoller.stopPollUpdates()
       for (const [identifier, bot] of Object.entries(this.bots)) {
         if (isFunction(bot['instance'].onRemove)) {
@@ -69,7 +64,10 @@ class BotMaster {
       if (isFunction(stopCallback)) {
         await stopCallback()
       }
-    })
+    }
+    // So we just call cleanup on SIGINT and SIGTERM to make a graceful exit.
+    process.on('SIGINT', cleanup)
+    process.on('SIGTERM', cleanup)
     if (isFunction(startCallback)) {
       await startCallback()
     }

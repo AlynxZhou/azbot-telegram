@@ -109,7 +109,10 @@ class BotPoller {
     } catch (error) {
       this.botLogger.error(error)
     }
-    this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval)
+    // Stop updating pollingID when stopPollUpdates() is called.
+    if (this.isPolling) {
+      this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval)
+    }
     return this.pollingID
   }
 
