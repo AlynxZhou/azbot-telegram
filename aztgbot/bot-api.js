@@ -30,8 +30,10 @@ class BotAPI {
   constructor(token) {
     /**
      * @property {String} token Telegram Bot token.
+     * @property {String} version Telegram Bot API version.
      */
     this.token = token
+    this.version = '4.9'
   }
 
   /**
@@ -127,7 +129,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Telegram chat ID.
    * @param {String} text Message content.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendMessage(chatID, text, opts = {}) {
@@ -154,7 +156,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} photo File ID, photo URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendPhoto(chatID, photo, opts = {}) {
@@ -172,7 +174,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} audio File ID, audio URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
@@ -191,7 +193,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} document File ID, document URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
@@ -211,7 +213,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} video File ID, video URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
@@ -231,7 +233,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} animation File ID, animation URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
@@ -251,7 +253,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} voice File ID, voice URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendVoice(chatID, voice, opts = {}) {
@@ -269,7 +271,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} videoNote File ID, video note URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {(String|Object)} [opts.thumb] Thumb URL or InputFile.
    * @return {Promise<Message>}
    */
@@ -331,7 +333,7 @@ class BotAPI {
    * @param {Number} latitude
    * @param {Number} longitude
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendLocation(chatID, latitude, longitude, opts = {}) {
@@ -346,7 +348,7 @@ class BotAPI {
    * @param {Number} latitude
    * @param {Number} longitude
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp.
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -364,7 +366,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#stopmessagelivelocation
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp.
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -387,7 +389,7 @@ class BotAPI {
    * @param {String} title
    * @param {String} address
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendVenue(chatID, latitude, longitude, title, address, opts = {}) {
@@ -403,7 +405,7 @@ class BotAPI {
    * @param {String} phoneNumber User's phone number.
    * @param {String} firstName User's first name.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendContact(chatID, phoneNumber, firstName, opts = {}) {
@@ -417,9 +419,9 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#sendpoll
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {String} question
-   * @param {String[]} options
+   * @param {String} options JSON-serialized Array of String.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendPoll(chatID, question, options, opts = {}) {
@@ -427,6 +429,17 @@ class BotAPI {
       {chatID, question, options},
       opts
     ))
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#senddice
+   * @param {(Number|String)} chatID Target Telegram chat ID.
+   * @param {Object} [opts] Optional Telegram patameters.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
+   * @return {Promise<Message>}
+   */
+  sendDice(chatID, opts = {}) {
+    return this.request('sendDice', toSnakeCaseObject({chatID}, opts))
   }
 
   /**
@@ -489,7 +502,7 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#restrictchatmember
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {Number} userID Target Telegram user ID.
-   * @param {ChatPermissions} permissions
+   * @param {String} permissions JSON-serialized ChatPermissions.
    * @param {Object} [opts] Optional Telegram patameters.
    * @return {Promise<Boolean>}
    */
@@ -515,9 +528,23 @@ class BotAPI {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setchatadministratorcustomtitle
+   * @param {(Number|String)} chatID Target Telegram chat ID.
+   * @param {Number} userID Target Telegram user ID.
+   * @param {String} customTitle
+   * @return {Promise<Boolean>}
+   */
+  setChatAdministratorCustomTitle(chatID, userID, customTitle) {
+    return this.request(
+      'setChatAdministratorCustomTitle',
+      toSnakeCaseObject({chatID, userID, customTitle})
+    )
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#setchatpermissions
    * @param {(Number|String)} chatID Target Telegram chat ID.
-   * @param {ChatPermissions} permissions
+   * @param {String} permissions JSON-serialized ChatPermissions.
    * @return {Promise<Boolean>}
    */
   setChatPermissions(chatID, permissions) {
@@ -682,10 +709,27 @@ class BotAPI {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setmycommands
+   * @param {String} commands JSON-serialized Array of BotCommand.
+   * @return {Promise<Boolean>}
+   */
+  setMyCommands(commands) {
+    return this.request('setMyCommands', toSnakeCaseObject({commands}))
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getmycommands
+   * @return {Promise<BotCommand[]>}
+   */
+  getMyCommands() {
+    return this.request('getMyCommands')
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#editmessagetext
    * @param {String} text Message content.
    * @param {Object} opts Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -703,7 +747,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#editmessagecaption
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp .
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -722,7 +766,7 @@ class BotAPI {
    * @see https://core.telegram.org/bots/api#editmessagemedia
    * @param {InputMedia} media Set InputMedia.media or InputMedia.thumb to Buffer for uploading a file.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp.
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -761,7 +805,7 @@ class BotAPI {
   /**
    * @see https://core.telegram.org/bots/api#editmessagereplymarkup
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp.
    * @param {Number} [opts.chatID] Required if inlineMessageID is not given.
    * @param {Number} [opts.messageID] Required if inlineMessageID is not given.
    * @param {String} [opts.inlineMessageID] Required if chatID and inlineMessageID are not given.
@@ -781,6 +825,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(Number|String)} messageID Target Telegram message ID.
    * @param {Object} [opts] Optional Telegram patameters.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkupp.
    * @return {Promise<Poll>}
    */
   stopPoll(chatID, messageID, opts = {}) {
@@ -808,6 +853,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {(String|Object)} sticker File ID, sticker URL or InputFile.
    * @param {Object} [opts] Optional Telegram patameters.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendSticker(chatID, sticker, opts = {}) {
@@ -835,10 +881,10 @@ class BotAPI {
    * @param {Object} pngSticker Sticker InputFile.
    * @return {Promise<Message>}
    */
-  uploadStickerFile(userID, pngStricker) {
+  uploadStickerFile(userID, pngSticker) {
     return this.request(
       'uploadStickerFile',
-      toSnakeCaseFormData({userID, pngStricker})
+      toSnakeCaseFormData({userID, pngSticker})
     )
   }
 
@@ -848,23 +894,25 @@ class BotAPI {
    * @param {String} name Short name of sticker set.
    * @param {String} title Sticker set title.
    * @param {(String|Object)} pngSticker File ID, sticker URL or InputFile.
+   * @param {(String|Object)} tgsSticker InputFile.
    * @param {String} emojis One or more emoji corresponding to the sticker.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.maskPosition] JSON-serialized MaskPosition.
    * @return {Promise<Boolean>}
    */
-  createNewStickerSet(userID, name, title, pngStricker, emojis, opts = {}) {
+  createNewStickerSet(userID, name, title, pngSticker, tgsSticker, emojis, opts = {}) {
+    const parameters = {userID, name, title, emojis}
     let body
-    if (isString(pngStricker)) {
-      body = toSnakeCaseObject(
-        {userID, name, title, pngStricker, emojis},
-        opts
-      )
+    if (tgsSticker != null) {
+      parameters['tgsSticker'] = tgsSticker
+    }
+    if (pngSticker != null) {
+      parameters['pngSticker'] = pngSticker
+    }
+    if (tgsSticker != null || (pngSticker != null && !isString(pngSticker))) {
+      body = toSnakeCaseFormData(parameters, opts)
     } else {
-      body = toSnakeCaseFormData(
-        {userID, name, title, pngStricker, emojis},
-        opts
-      )
+      body = toSnakeCaseObject(parameters, opts)
     }
     return this.request('createNewStickerSet', body)
   }
@@ -874,17 +922,25 @@ class BotAPI {
    * @param {Number} userID Telegram user ID for sticker set owner.
    * @param {String} name
    * @param {(String|Object)} pngSticker File ID, sticker URL or InputFile.
+   * @param {(String|Object)} tgsSticker InputFile.
    * @param {String} emojis One or more emoji corresponding to the sticker.
    * @param {Object} [opts] Optional Telegram patameters.
    * @param {String} [opts.maskPosition] JSON-serialized MaskPosition.
    * @return {Promise<Boolean>}
    */
-  addStickerToSet(userID, name, pngStricker, emojis, opts = {}) {
+  addStickerToSet(userID, name, pngSticker, tgsSticker, emojis, opts = {}) {
+    const parameters = {userID, name, emojis}
     let body
-    if (isString(pngStricker)) {
-      body = toSnakeCaseObject({userID, name, pngStricker, emojis}, opts)
+    if (tgsSticker != null) {
+      parameters['tgsSticker'] = tgsSticker
+    }
+    if (pngSticker != null) {
+      parameters['pngSticker'] = pngSticker
+    }
+    if (tgsSticker != null || (pngSticker != null && !isString(pngSticker))) {
+      body = toSnakeCaseFormData(parameters, opts)
     } else {
-      body = toSnakeCaseFormData({userID, name, pngStricker, emojis}, opts)
+      body = toSnakeCaseObject(parameters, opts)
     }
     return this.request('addStickerToSet', body)
   }
@@ -912,6 +968,23 @@ class BotAPI {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#setstickersetthumb
+   * @param {String} name Sticker set name.
+   * @param {Number} userID Telegram user ID of the sticker set owner.
+   * @param {(String|Object)} thumb File ID, sticker URL or InputFile.
+   * @return {Promise<Boolean>}
+   */
+  setStickerSetThumb(name, userID, thumb) {
+    let body
+    if (!isString(thumb)) {
+      body = toSnakeCaseFormData({name, userID, thumb})
+    } else {
+      body = toSnakeCaseObject({name, userID, thumb})
+    }
+    return this.request('setStickerSetThumb', body)
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#answerinlinequery
    * @param {String} inlineQueryID Target inline query ID.
    * @param {String} results JSON-serialized Array of InlineQueryResult.
@@ -936,7 +1009,7 @@ class BotAPI {
    * @param {String} currency Three-letter ISO 4217 currency code.
    * @param {String} prices Price breakdown, a list of components.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendInvoice(
@@ -998,7 +1071,7 @@ class BotAPI {
    * @param {(Number|String)} chatID Target Telegram chat ID.
    * @param {String} gameShortName Short name of the game.
    * @param {Object} [opts] Optional Telegram patameters.
-   * @param {String} [opts.replyMarkup] JSON-serialized Object.
+   * @param {String} [opts.replyMarkup] JSON-serialized InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply.
    * @return {Promise<Message>}
    */
   sendGame(chatID, gameShortName, opts = {}) {
