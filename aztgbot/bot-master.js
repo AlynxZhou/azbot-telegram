@@ -44,10 +44,13 @@ class BotMaster {
   }
 
   /**
-   * @param {Function} [startCallback]
-   * @param {Function} [stopCallback]
+   * @param {Object} [opts]
+   * @param {Function} [opts.startCallback]
+   * @param {Function} [opts.stopCallback]
    */
-  async loop(startCallback, stopCallback) {
+  async loop(opts = {}) {
+    const startCallback = opts['startCallback'] || null
+    const stopCallback = opts['stopCallback'] || null
     process.on('SIGINT', () => {
       process.exit(0)
     })
