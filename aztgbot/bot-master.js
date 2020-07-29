@@ -54,6 +54,9 @@ class BotMaster {
     process.on('SIGINT', () => {
       process.exit(0)
     })
+    process.on('SIGTERM', () => {
+      process.exit(0)
+    })
     process.on('exit', async () => {
       this.botPoller.stopPollUpdates()
       for (const [identifier, bot] of Object.entries(this.bots)) {
