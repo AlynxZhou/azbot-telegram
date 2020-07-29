@@ -34,8 +34,7 @@ class EchoBot extends BotServant {
   }
 
   async processUpdate(update) {
-    if (update != null &&
-        update['message'] != null &&
+    if (update['message'] != null &&
         update['message']['text'] != null) {
       await this.botAPI.sendChatAction(
         update['message']['chat']['id'],
@@ -75,25 +74,16 @@ class MediaBot {
   }
 
   loop() {
-    if (process.platform === 'win32') {
-      require('readline').createInterface({
-        'input': process.stdin,
-        'output': process.stdout
-      }).on('SIGINT', () => {
-        process.emit('SIGINT')
-      })
-    }
     process.on('SIGINT', () => {
       this.botPoller.stopPollUpdates()
-      process.exit()
+      process.exit(0)
     })
     this.botPoller.startPollUpdates()
   }
 
   async onUpdates(updates) {
     for (const update of updates) {
-      if (update != null &&
-          update['message'] != null &&
+      if (update['message'] != null &&
           update['message']['text'] != null) {
         await this.botAPI.sendChatAction(
           update['message']['chat']['id'],
