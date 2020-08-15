@@ -1,12 +1,12 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-master
  */
 
-const {isFunction} = require('./bot-utils')
-const BotPoller = require('./bot-poller')
-const BotLogger = require('./bot-logger')
+const {isFunction} = require("./bot-utils");
+const BotPoller = require("./bot-poller");
+const BotLogger = require("./bot-logger");
 
 /**
  * @description Create BotServant per identifier.
@@ -25,22 +25,22 @@ class BotMaster {
    * @return {BotMaster}
    */
   constructor(botAPI, BotServant, identify, opts = {}) {
-    this.botAPI = botAPI
-    this.BotServant = BotServant
+    this.botAPI = botAPI;
+    this.BotServant = BotServant;
     if (!isFunction(identify)) {
-      throw new TypeError("Expect a Function as `identify`")
+      throw new TypeError("Expect a Function as `identify`");
     }
-    this.identify = identify
-    this.botLogger = opts['botLogger'] || new BotLogger()
-    this.destroyTimeout = opts['destroyTimeout'] || 5 * 60 * 1000
+    this.identify = identify;
+    this.botLogger = opts["botLogger"] || new BotLogger();
+    this.destroyTimeout = opts["destroyTimeout"] || 5 * 60 * 1000;
     this.botPoller = new BotPoller(this.botAPI, this.onUpdates.bind(this), {
-      'pollingInterval': opts["pollingInterval"],
-      'skippingUpdates': opts["skippingUpdates"],
-      'botLogger': this.botLogger
-    })
-    this.bots = {}
-    this.botID = null
-    this.botName = null
+      "pollingInterval": opts["pollingInterval"],
+      "skippingUpdates": opts["skippingUpdates"],
+      "botLogger": this.botLogger
+    });
+    this.bots = {};
+    this.botID = null;
+    this.botName = null;
   }
 
   /**
@@ -49,33 +49,33 @@ class BotMaster {
    * @param {Function} [opts.stopCallback]
    */
   async loop(opts = {}) {
-    const startCallback = opts['startCallback'] || null
-    const stopCallback = opts['stopCallback'] || null
+    const startCallback = opts["startCallback"] || null;
+    const stopCallback = opts["stopCallback"] || null;
     // If we close all scheduled works, Node.js will exit automatically.
     const cleanup = async () => {
-      this.botPoller.stopPollUpdates()
+      this.botPoller.stopPollUpdates();
       for (const [identifier, bot] of Object.entries(this.bots)) {
-        if (isFunction(bot['instance'].onRemove)) {
-          await bot['instance'].onRemove()
+        if (isFunction(bot["instance"].onRemove)) {
+          await bot["instance"].onRemove();
         }
-        delete this.bots[identifier]
+        delete this.bots[identifier];
       }
-      this.botLogger.debug(`${this.botName}#${this.botID}: I am exiting…`)
+      this.botLogger.debug(`${this.botName}#${this.botID}: I am exiting…`);
       if (isFunction(stopCallback)) {
-        await stopCallback()
+        await stopCallback();
       }
-    }
+    };
     // So we just call cleanup on SIGINT and SIGTERM to make a graceful exit.
-    process.on('SIGINT', cleanup)
-    process.on('SIGTERM', cleanup)
+    process.on("SIGINT", cleanup);
+    process.on("SIGTERM", cleanup);
     if (isFunction(startCallback)) {
-      await startCallback()
+      await startCallback();
     }
-    const me = await this.botAPI.getMe()
-    this.botID = me['id']
-    this.botName = me['username']
-    this.botLogger.debug(`${this.botName}#${this.botID}: I am listening…`)
-    this.botPoller.startPollUpdates()
+    const me = await this.botAPI.getMe();
+    this.botID = me["id"];
+    this.botName = me["username"];
+    this.botLogger.debug(`${this.botName}#${this.botID}: I am listening…`);
+    this.botPoller.startPollUpdates();
   }
 
   /**
@@ -84,34 +84,34 @@ class BotMaster {
    */
   async onUpdates(updates) {
     for (const update of updates) {
-      const identifier = this.identify(update)
+      const identifier = this.identify(update);
       if (this.bots[identifier] == null) {
         this.bots[identifier] = {
-          'lastActiveTime': 0,
-          'instance': new this.BotServant(
+          "lastActiveTime": 0,
+          "instance": new this.BotServant(
             this.botAPI, identifier, this.botID, this.botName
           )
-        }
-        this.botLogger.debug(`${this.botName}#${this.botID}: Creating instance for identifier ${identifier}…`)
-        if (isFunction(this.bots[identifier]['instance'].onCreate)) {
-          await this.bots[identifier]['instance'].onCreate()
+        };
+        this.botLogger.debug(`${this.botName}#${this.botID}: Creating instance for identifier ${identifier}…`);
+        if (isFunction(this.bots[identifier]["instance"].onCreate)) {
+          await this.bots[identifier]["instance"].onCreate();
         }
       }
-      this.bots[identifier]['instance'].processUpdate(update)
-      this.bots[identifier]['lastActiveTime'] = Date.now()
+      this.bots[identifier]["instance"].processUpdate(update);
+      this.bots[identifier]["lastActiveTime"] = Date.now();
     }
     if (this.destroyTimeout != null) {
       for (const [identifier, bot] of Object.entries(this.bots)) {
-        if (Date.now() - bot['lastActiveTime'] > this.destroyTimeout) {
-          if (isFunction(bot['instance'].onRemove)) {
-            await bot['instance'].onRemove()
+        if (Date.now() - bot["lastActiveTime"] > this.destroyTimeout) {
+          if (isFunction(bot["instance"].onRemove)) {
+            await bot["instance"].onRemove();
           }
-          this.botLogger.debug(`${this.botName}#${this.botID}: Removing instance for identifier ${identifier}…`)
-          delete this.bots[identifier]
+          this.botLogger.debug(`${this.botName}#${this.botID}: Removing instance for identifier ${identifier}…`);
+          delete this.bots[identifier];
         }
       }
     }
   }
 }
 
-module.exports = BotMaster
+module.exports = BotMaster;

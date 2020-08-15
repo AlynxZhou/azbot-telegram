@@ -1,10 +1,10 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-logger
  */
 
-const {isObject, isFunction} = require('./bot-utils')
+const {isObject, isFunction} = require("./bot-utils");
 
 /**
  * @description A Logger with colored output.
@@ -24,20 +24,20 @@ class BotLogger extends console.Console {
   constructor(opts = {}) {
     // Keep compatibility.
     if (!isObject(opts)) {
-      opts = {'debug': opts}
+      opts = {"debug": opts};
     }
     super(
-      opts['stdout'] || process.stdout,
-      opts['stderr'] || process.stderr
-    )
-    this.opts = {}
-    this.opts['stdout'] = opts['stdout'] || process.stdout
-    this.opts['stderr'] = opts['stderr'] || process.stderr
-    this.opts['debug'] = opts['debug'] || false
-    this.opts['color'] = opts['color'] == null ? true : opts['color']
+      opts["stdout"] || process.stdout,
+      opts["stderr"] || process.stderr
+    );
+    this.opts = {};
+    this.opts["stdout"] = opts["stdout"] || process.stdout;
+    this.opts["stderr"] = opts["stderr"] || process.stderr;
+    this.opts["debug"] = opts["debug"] || false;
+    this.opts["color"] = opts["color"] == null ? true : opts["color"];
     // Disable colored output if piped.
-    if (!this.opts['stdout'].isTTY || !this.opts['stderr'].isTTY) {
-      this.opts['color'] = false
+    if (!this.opts["stdout"].isTTY || !this.opts["stderr"].isTTY) {
+      this.opts["color"] = false;
     }
   }
 
@@ -46,10 +46,10 @@ class BotLogger extends console.Console {
    * @return {String}
    */
   blue(str) {
-    if (this.opts['color']) {
-      return `\x1b[34m${str}\x1b[0m`
+    if (this.opts["color"]) {
+      return `\x1b[34m${str}\x1b[0m`;
     }
-    return str
+    return str;
   }
 
   /**
@@ -57,10 +57,10 @@ class BotLogger extends console.Console {
    * @return {String}
    */
   green(str) {
-    if (this.opts['color']) {
-      return `\x1b[32m${str}\x1b[0m`
+    if (this.opts["color"]) {
+      return `\x1b[32m${str}\x1b[0m`;
     }
-    return str
+    return str;
   }
 
   /**
@@ -68,10 +68,10 @@ class BotLogger extends console.Console {
    * @return {String}
    */
   yellow(str) {
-    if (this.opts['color']) {
-      return `\x1b[33m${str}\x1b[0m`
+    if (this.opts["color"]) {
+      return `\x1b[33m${str}\x1b[0m`;
     }
-    return str
+    return str;
   }
 
   /**
@@ -79,10 +79,10 @@ class BotLogger extends console.Console {
    * @return {String}
    */
   red(str) {
-    if (this.opts['color']) {
-      return `\x1b[31m${str}\x1b[0m`
+    if (this.opts["color"]) {
+      return `\x1b[31m${str}\x1b[0m`;
     }
-    return str
+    return str;
   }
 
   /**
@@ -90,36 +90,36 @@ class BotLogger extends console.Console {
    * @return {String}
    */
   cyan(str) {
-    if (this.opts['color']) {
-      return `\x1b[36m${str}\x1b[0m`
+    if (this.opts["color"]) {
+      return `\x1b[36m${str}\x1b[0m`;
     }
-    return str
+    return str;
   }
 
   /**
    * @param {...*} strs
    */
   log(...strs) {
-    return super.log('LOG:', ...strs)
+    return super.log("LOG:", ...strs);
   }
 
   /**
    * @param {...*} strs
    */
   info(...strs) {
-    return super.info(`${this.blue('INFO')}:`, ...strs)
+    return super.info(`${this.blue("INFO")}:`, ...strs);
   }
 
   /**
    * @param {...*} strs
    */
   debug(...strs) {
-    if (this.opts['debug']) {
+    if (this.opts["debug"]) {
       // Node.js 8 does not support `console.debug`.
       if (isFunction(super.debug)) {
-        return super.debug(`${this.green('DEBUG')}:`, ...strs)
+        return super.debug(`${this.green("DEBUG")}:`, ...strs);
       }
-      return super.log(`${this.green('DEBUG')}:`, ...strs)
+      return super.log(`${this.green("DEBUG")}:`, ...strs);
     }
   }
 
@@ -127,15 +127,15 @@ class BotLogger extends console.Console {
    * @param {...*} strs
    */
   warn(...strs) {
-    return super.warn(`${this.yellow('WARN')}:`, ...strs)
+    return super.warn(`${this.yellow("WARN")}:`, ...strs);
   }
 
   /**
    * @param {...*} strs
    */
   error(...strs) {
-    return super.error(`${this.red('ERROR')}:`, ...strs)
+    return super.error(`${this.red("ERROR")}:`, ...strs);
   }
 }
 
-module.exports = BotLogger
+module.exports = BotLogger;

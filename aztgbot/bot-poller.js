@@ -1,11 +1,11 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-poller
  */
 
-const {isFunction} = require('./bot-utils')
-const BotLogger = require('./bot-logger')
+const {isFunction} = require("./bot-utils");
+const BotLogger = require("./bot-logger");
 
 /**
  * @description A Poller that automatically run `getUpdates()` and call `onUpdates()`.
@@ -23,20 +23,20 @@ class BotPoller {
    * @return {BotPoller}
    */
   constructor(botAPI, onUpdates, opts = {}) {
-    this.botAPI = botAPI
+    this.botAPI = botAPI;
     if (!isFunction(onUpdates)) {
-      throw new TypeError("Expect a Function as `onUpdates`")
+      throw new TypeError("Expect a Function as `onUpdates`");
     }
-    this.onUpdates = onUpdates
-    this.pollingInterval = opts['pollingInterval'] || 700
-    this.skippingUpdates = opts['skippingUpdates']
-    this.botLogger = opts['botLogger'] || new BotLogger(false)
-    this.isPolling = false
-    this.pollingID = null
+    this.onUpdates = onUpdates;
+    this.pollingInterval = opts["pollingInterval"] || 700;
+    this.skippingUpdates = opts["skippingUpdates"];
+    this.botLogger = opts["botLogger"] || new BotLogger(false);
+    this.isPolling = false;
+    this.pollingID = null;
     this.pollingParam = {
-      'offset': 0,
-      'timeout': 1
-    }
+      "offset": 0,
+      "timeout": 1
+    };
   }
 
   /**
@@ -44,14 +44,14 @@ class BotPoller {
    * @return {Promise<Update[]>}
    */
   async getUpdates() {
-    let updates
+    let updates;
     try {
-      updates = await this.botAPI.getUpdates(this.pollingParam)
+      updates = await this.botAPI.getUpdates(this.pollingParam);
     } catch (error) {
-      this.botLogger.error(error)
-      updates = []
+      this.botLogger.error(error);
+      updates = [];
     }
-    return updates
+    return updates;
   }
 
   /**
@@ -60,13 +60,13 @@ class BotPoller {
    * @return {Promise<Update[]>}
    */
   async skipUpdates() {
-    this.pollingParam['offset'] = -1
-    const updates = await this.getUpdates()
+    this.pollingParam["offset"] = -1;
+    const updates = await this.getUpdates();
     // Should be only one or zero update here.
     if (updates.length > 0) {
-      this.pollingParam['offset'] = updates[0]['update_id'] + 1
+      this.pollingParam["offset"] = updates[0]["update_id"] + 1;
     }
-    return updates
+    return updates;
   }
 
   /**
@@ -77,15 +77,15 @@ class BotPoller {
       // By default we skip Updates.
       if (this.skippingUpdates == null || this.skippingUpdates === true) {
         try {
-          await this.skipUpdates()
+          await this.skipUpdates();
         } catch (error) {
-          this.botLogger.error(error)
+          this.botLogger.error(error);
         }
       }
-      this.isPolling = true
-      this.pollUpdates()
+      this.isPolling = true;
+      this.pollUpdates();
     }
-    return this.isPolling
+    return this.isPolling;
   }
 
   /**
@@ -93,27 +93,27 @@ class BotPoller {
    * @return {Number} Polling ID.
    */
   async pollUpdates() {
-    this.botLogger.debug(`poller: polling updates since offset ${this.pollingParam['offset']}…`)
+    this.botLogger.debug(`poller: polling updates since offset ${this.pollingParam["offset"]}…`);
     try {
-      const updates = await this.getUpdates()
-      this.onUpdates(updates)
-      let updateID = 0
-      for (let update of updates) {
-        if (updateID < update['update_id']) {
-          updateID = update['update_id']
+      const updates = await this.getUpdates();
+      this.onUpdates(updates);
+      let updateID = 0;
+      for (const update of updates) {
+        if (updateID < update["update_id"]) {
+          updateID = update["update_id"];
         }
       }
       if (updateID !== 0) {
-        this.pollingParam['offset'] = updateID + 1
+        this.pollingParam["offset"] = updateID + 1;
       }
     } catch (error) {
-      this.botLogger.error(error)
+      this.botLogger.error(error);
     }
     // Stop updating pollingID when stopPollUpdates() is called.
     if (this.isPolling) {
-      this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval)
+      this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval);
     }
-    return this.pollingID
+    return this.pollingID;
   }
 
   /**
@@ -121,11 +121,11 @@ class BotPoller {
    */
   stopPollUpdates() {
     if (this.isPolling) {
-      this.isPolling = false
-      clearTimeout(this.pollingID)
+      this.isPolling = false;
+      clearTimeout(this.pollingID);
     }
-    return this.isPolling
+    return this.isPolling;
   }
 }
 
-module.exports = BotPoller
+module.exports = BotPoller;

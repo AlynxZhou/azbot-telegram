@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-servant
@@ -15,10 +15,10 @@ class BotServant {
    * @param {String} botName
    */
   constructor(botAPI, identifier, botID, botName) {
-    this.botAPI = botAPI
-    this.identifier = identifier
-    this.botID = botID
-    this.botName = botName
+    this.botAPI = botAPI;
+    this.identifier = identifier;
+    this.botID = botID;
+    this.botName = botName;
   }
 
   /**
@@ -44,4 +44,4 @@ class BotServant {
   }
 }
 
-module.exports = BotServant
+module.exports = BotServant;

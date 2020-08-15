@@ -1,12 +1,12 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-utils
  */
 
-const fs = require('fs')
-const path = require('path')
-const https = require('https')
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
 /**
  * @description A helper class for uploading file.
@@ -20,12 +20,12 @@ class InputFile {
    * @return {InputFile}
    */
   constructor(filepath, buffer = null) {
-    this.filename = path.basename(filepath)
+    this.filename = path.basename(filepath);
     if (buffer == null) {
       // Read file content from path.
-      this.buffer = fs.readFileSync(filepath)
+      this.buffer = fs.readFileSync(filepath);
     } else {
-      this.buffer = buffer
+      this.buffer = buffer;
     }
   }
 }
@@ -43,10 +43,10 @@ class InputMedia {
    * @return {InputMedia}
    */
   constructor(type, media, opts = {}) {
-    this.type = type
-    this.media = media
-    opts = toSnakeCaseObject(opts)
-    Object.assign(this, opts)
+    this.type = type;
+    this.media = media;
+    opts = toSnakeCaseObject(opts);
+    Object.assign(this, opts);
   }
 }
 
@@ -62,7 +62,7 @@ class InputMediaPhoto extends InputMedia {
    * @return {InputMedia}
    */
   constructor(media, opts = {}) {
-    super('photo', media, opts)
+    super("photo", media, opts);
   }
 }
 
@@ -78,7 +78,7 @@ class InputMediaVideo extends InputMedia {
    * @return {InputMedia}
    */
   constructor(media, opts = {}) {
-    super('video', media, opts)
+    super("video", media, opts);
   }
 }
 
@@ -94,7 +94,7 @@ class InputMediaAnimation extends InputMedia {
    * @return {InputMedia}
    */
   constructor(media, opts = {}) {
-    super('animation', media, opts)
+    super("animation", media, opts);
   }
 }
 
@@ -110,7 +110,7 @@ class InputMediaAudio extends InputMedia {
    * @return {InputMedia}
    */
   constructor(media, opts = {}) {
-    super('audio', media, opts)
+    super("audio", media, opts);
   }
 }
 
@@ -126,7 +126,7 @@ class InputMediaDocument extends InputMedia {
    * @return {InputMedia}
    */
   constructor(media, opts = {}) {
-    super('document', media, opts)
+    super("document", media, opts);
   }
 }
 
@@ -143,9 +143,9 @@ class FormData {
    * @return {FormData}
    */
   constructor() {
-    this.buffer = null
-    this.boundary = `${Math.random().toString(16)}`
-    this.data = {}
+    this.buffer = null;
+    this.boundary = `${Math.random().toString(16)}`;
+    this.data = {};
   }
 
   /**
@@ -155,14 +155,14 @@ class FormData {
    * @param {String} [filename] If you want to upload a file, Telegram Bot API needs this.
    */
   append(name, value, filename = null) {
-    name = `${name}`
+    name = `${name}`;
     if (!(isString(value) || isBuffer(value))) {
-      value = `${value}`
+      value = `${value}`;
     }
     if (this.data[name] == null) {
-      this.data[name] = []
+      this.data[name] = [];
     }
-    this.data[name].push({name, value, filename})
+    this.data[name].push({name, value, filename});
   }
 
   /**
@@ -171,7 +171,7 @@ class FormData {
    */
   delete(name) {
     if (this.data[name] != null) {
-      delete this.data[name]
+      delete this.data[name];
     }
   }
 
@@ -182,9 +182,9 @@ class FormData {
    */
   get(name) {
     if (this.data[name] == null) {
-      return null
+      return null;
     }
-    return this.data[name][0]['value']
+    return this.data[name][0]["value"];
   }
 
   /**
@@ -194,11 +194,11 @@ class FormData {
    */
   getAll(name) {
     if (this.data[name] == null) {
-      return null
+      return null;
     }
     return this.data[name].map((o) => {
-      return o['value']
-    })
+      return o["value"];
+    });
   }
 
   /**
@@ -208,11 +208,11 @@ class FormData {
    * @param {String} [filename] If you want to upload a file, Telegram Bot API needs this.
    */
   set(name, value, filename = null) {
-    name = `${name}`
-    if (!(isSting(value) || isBuffer(value))) {
-      value = `${value}`
+    name = `${name}`;
+    if (!(isString(value) || isBuffer(value))) {
+      value = `${value}`;
     }
-    this.data[name] = [{name, value, filename}]
+    this.data[name] = [{name, value, filename}];
   }
 
   /**
@@ -221,16 +221,16 @@ class FormData {
    * @return {Boolean}
    */
   has(name) {
-    return this.data[name] != null
+    return this.data[name] != null;
   }
 
   /**
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/keys
    * @return {Iterator<String>}
    */
-  *keys() {
+  * keys() {
     for (const key of Object.keys(this.data)) {
-      yield key
+      yield key;
     }
   }
 
@@ -238,13 +238,13 @@ class FormData {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/values
    * @return {Iterator<(String|Buffer)>}
    */
-  *values() {
+  * values() {
     for (const value of Object.values(this.data).reduce((acc, curr) => {
       return acc.concat(curr.map((o) => {
-        return o['value']
-      }))
+        return o["value"];
+      }));
     })) {
-      yield value
+      yield value;
     }
   }
 
@@ -252,13 +252,13 @@ class FormData {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/entries
    * @return {Iterator<String, (String|Buffer)>}
    */
-  *entries() {
+  * entries() {
     for (const entries of Object.entries(this.data).reduce((acc, curr) => {
       return acc.concat(curr[1].map((o) => {
-        return [curr[0], o['value']]
-      }))
+        return [curr[0], o["value"]];
+      }));
     })) {
-      yield entries
+      yield entries;
     }
   }
 
@@ -267,21 +267,21 @@ class FormData {
    * @return {Buffer}
    */
   getBuffer() {
-    const array = []
+    const array = [];
     for (const [name, values] of Object.entries(this.data)) {
       for (const o of values) {
-        array.push(`\r\n--${this.boundary}\r\n`)
-        array.push(`Content-Disposition: form-data; name="${name}"`)
-        if (o['filename'] != null) {
-          array.push(`; filename="${o['filename']}"`)
+        array.push(`\r\n--${this.boundary}\r\n`);
+        array.push(`Content-Disposition: form-data; name="${name}"`);
+        if (o["filename"] != null) {
+          array.push(`; filename="${o["filename"]}"`);
         }
-        array.push(`\r\n\r\n`)
-        array.push(o['value'])
+        array.push("\r\n\r\n");
+        array.push(o["value"]);
       }
     }
-    array.push(`\r\n--${this.boundary}--`)
-    this.buffer = Buffer.concat(array.map(Buffer.from))
-    return this.buffer
+    array.push(`\r\n--${this.boundary}--`);
+    this.buffer = Buffer.concat(array.map(Buffer.from));
+    return this.buffer;
   }
 
   /**
@@ -290,9 +290,9 @@ class FormData {
    */
   getLength() {
     if (this.buffer == null) {
-      this.getBuffer()
+      this.getBuffer();
     }
-    return this.buffer.length
+    return this.buffer.length;
   }
 
   /**
@@ -302,10 +302,10 @@ class FormData {
    */
   getHeaders() {
     return {
-      'Content-Type': `multipart/form-data; boundary=${this.boundary}`,
+      "Content-Type": `multipart/form-data; boundary=${this.boundary}`,
       "Transfer-Encoding": "chunked",
       "Content-Length": this.getLength()
-    }
+    };
   }
 }
 
@@ -317,26 +317,26 @@ class FormData {
  */
 const get = (url, headers = {}) => {
   const opts = {
-    'method': 'GET',
-    'timeout': 1500,
-    'headers': {}
-  }
+    "method": "GET",
+    "timeout": 1500,
+    "headers": {}
+  };
   for (const [k, v] of Object.entries(headers)) {
-    opts['headers'][k.toLowerCase()] = v
+    opts["headers"][k.toLowerCase()] = v;
   }
   return new Promise((resolve, reject) => {
-    const chunks = []
+    const chunks = [];
     const req = https.request(url, opts, (res) => {
       res.on("data", (chunk) => {
-        chunks.push(chunk)
-      })
+        chunks.push(chunk);
+      });
       res.on("end", () => {
-        resolve(Buffer.concat(chunks))
-      })
-    }).on('error', reject)
-    req.end()
-  })
-}
+        resolve(Buffer.concat(chunks));
+      });
+    }).on("error", reject);
+    req.end();
+  });
+};
 
 /**
  * @param {String} url Target URL.
@@ -346,32 +346,32 @@ const get = (url, headers = {}) => {
  */
 const post = (url, body, headers = {}) => {
   const opts = {
-    'method': 'POST',
-    'timeout': 1500,
-    'headers': {}
-  }
+    "method": "POST",
+    "timeout": 1500,
+    "headers": {}
+  };
   for (const [k, v] of Object.entries(headers)) {
-    opts['headers'][k.toLowerCase()] = v
+    opts["headers"][k.toLowerCase()] = v;
   }
   if (!(isBuffer(body) || isString(body))) {
-    body = JSON.stringify(body)
-    opts['headers']['content-type'] = 'application/json'
-    opts['headers']['content-length'] = `${Buffer.byteLength(body)}`
+    body = JSON.stringify(body);
+    opts["headers"]["content-type"] = "application/json";
+    opts["headers"]["content-length"] = `${Buffer.byteLength(body)}`;
   }
   return new Promise((resolve, reject) => {
-    const chunks = []
+    const chunks = [];
     const req = https.request(url, opts, (res) => {
       res.on("data", (chunk) => {
-        chunks.push(chunk)
-      })
+        chunks.push(chunk);
+      });
       res.on("end", () => {
-        resolve(Buffer.concat(chunks))
-      })
-    }).on('error', reject)
-    req.write(body)
-    req.end()
-  })
-}
+        resolve(Buffer.concat(chunks));
+      });
+    }).on("error", reject);
+    req.write(body);
+    req.end();
+  });
+};
 
 /**
  * @param {Object} update Telegram update.
@@ -379,13 +379,13 @@ const post = (url, body, headers = {}) => {
  */
 const perFromID = (update) => {
   if (update != null &&
-      update['message'] != null &&
-      update['message']['from'] != null &&
-      update['message']['from']['id'] != null) {
-    return `${update['message']['from']['id']}`
+      update["message"] != null &&
+      update["message"]["from"] != null &&
+      update["message"]["from"]["id"] != null) {
+    return `${update["message"]["from"]["id"]}`;
   }
-  return `0`
-}
+  return "0";
+};
 
 /**
  * @param {Object} update Telegram update.
@@ -393,61 +393,61 @@ const perFromID = (update) => {
  */
 const perChatID = (update) => {
   if (update != null &&
-      update['message'] != null &&
-      update['message']['chat'] != null &&
-      update['message']['chat']['id'] != null) {
-    return `${update['message']['chat']['id']}`
+      update["message"] != null &&
+      update["message"]["chat"] != null &&
+      update["message"]["chat"]["id"] != null) {
+    return `${update["message"]["chat"]["id"]}`;
   }
-  return `0`
-}
+  return "0";
+};
 
 /**
  * @param {*} o
  * @return {Boolean}
  */
 const isString = (o) => {
-  return typeof(o) === "string"
-}
+  return typeof (o) === "string";
+};
 
 /**
  * @param {*} o
  * @return {Boolean}
  */
 const isArray = (o) => {
-  return Array.isArray(o)
-}
+  return Array.isArray(o);
+};
 
 /**
  * @param {*} o
  * @return {Boolean}
  */
 const isFunction = (o) => {
-  return o instanceof Function
-}
+  return o instanceof Function;
+};
 
 /**
  * @param {*} o
  * @return {Boolean} Return `false` when `o == null`.
  */
 const isObject = (o) => {
-  return typeof(o) === "object" && o != null
-}
+  return typeof (o) === "object" && o != null;
+};
 
 /**
  * @param {*} o
  * @return {Boolean}
  */
 const isBuffer = (o) => {
-  return Buffer.isBuffer(o)
-}
+  return Buffer.isBuffer(o);
+};
 
 /**
  * @param {*} o
  * @return {Boolean}
  */
 const isFormData = (o) => {
-  return o instanceof FormData
-}
+  return o instanceof FormData;
+};
 
 /**
  * @description Replace camelCase to snake_case, e.g. `_ChatID` to `_chat_id`.
@@ -461,20 +461,20 @@ const toSnakeCase = (camelCase) => {
     // This must be the first to escape from the 3rd regexp.
     // `Chat_id` to `chat_id`
     .replace(/^([A-Z]+)/g, (match, p1) => {
-      return p1.toLowerCase()
+      return p1.toLowerCase();
     })
     // CamelCase after a underscore is replaced by lower case.
     // `chat_ID` to `chat_id`
     .replace(/(_[A-Z]+)/g, (match, p1) => {
-      return p1.toLowerCase()
+      return p1.toLowerCase();
     })
     // CamelCase without a underscore and not in line head
     // is replaced by lower case with underscore.
     // `chatID` to `chat_id`
     .replace(/([A-Z]+)/g, (match, p1) => {
-      return `_${p1.toLowerCase()}`
-    })
-}
+      return `_${p1.toLowerCase()}`;
+    });
+};
 
 /**
  * @description Assign Objects into one Object which keys are all transfered into snake_case.
@@ -482,14 +482,14 @@ const toSnakeCase = (camelCase) => {
  * @return {Object} Assigned snake_case Object.
  */
 const toSnakeCaseObject = (...objects) => {
-  const result = {}
+  const result = {};
   for (const object of objects) {
     for (const entry of Object.entries(object)) {
-      result[toSnakeCase(entry[0])] = entry[1]
+      result[toSnakeCase(entry[0])] = entry[1];
     }
   }
-  return result
-}
+  return result;
+};
 
 /**
  * @description Assign Objects into one FormData which keys are all transfered into snake_case.
@@ -497,23 +497,23 @@ const toSnakeCaseObject = (...objects) => {
  * @return {FormData} Assigned snake_case FormData.
  */
 const toSnakeCaseFormData = (...objects) => {
-  const formData = new FormData()
+  const formData = new FormData();
   for (const object of objects) {
     for (const entry of Object.entries(object)) {
       if (isObject(entry[1])) {
         // Append with a filename
         formData.append(
           toSnakeCase(entry[0]),
-          entry[1]['buffer'],
-          entry[1]['filename']
-        )
+          entry[1]["buffer"],
+          entry[1]["filename"]
+        );
       } else {
-        formData.append(toSnakeCase(entry[0]), entry[1])
+        formData.append(toSnakeCase(entry[0]), entry[1]);
       }
     }
   }
-  return formData
-}
+  return formData;
+};
 
 module.exports = {
   InputFile,
@@ -537,4 +537,4 @@ module.exports = {
   toSnakeCase,
   toSnakeCaseObject,
   toSnakeCaseFormData
-}
+};

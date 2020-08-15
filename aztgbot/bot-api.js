@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /**
  * @module bot-api
@@ -7,15 +7,12 @@
 const {
   get,
   post,
-  isArray,
   isString,
-  isFunction,
   isObject,
-  isBuffer,
   isFormData,
   toSnakeCaseObject,
   toSnakeCaseFormData
-} = require('./bot-utils')
+} = require("./bot-utils");
 
 /**
  * @description JavaScript implemention for Telegram Bot API.
@@ -32,8 +29,8 @@ class BotAPI {
      * @property {String} token Telegram Bot token.
      * @property {String} version Telegram Bot API version.
      */
-    this.token = token
-    this.version = '4.9'
+    this.token = token;
+    this.version = "4.9";
   }
 
   /**
@@ -41,7 +38,7 @@ class BotAPI {
    * @return {Boolean}
    */
   isBotAPI(o) {
-    return o instanceof BotAPI
+    return o instanceof BotAPI;
   }
 
   /**
@@ -52,27 +49,27 @@ class BotAPI {
    * @return {Promise} Promise of Telegram result.
    */
   request(method, body) {
-    const url = `https://api.telegram.org/bot${this.token}/${method}`
-    let promise
+    const url = `https://api.telegram.org/bot${this.token}/${method}`;
+    let promise;
     if (body != null) {
       if (isFormData(body)) {
-        promise = post(url, body.getBuffer(), body.getHeaders())
+        promise = post(url, body.getBuffer(), body.getHeaders());
       } else {
-        promise = post(url, body)
+        promise = post(url, body);
       }
     } else {
-      promise = get(url)
+      promise = get(url);
     }
     return promise.then((response) => {
-      let data = JSON.parse(response.toString('utf8'))
-      if (!data['ok']) {
+      const data = JSON.parse(response.toString("utf8"));
+      if (!data["ok"]) {
         throw new Error(
-          `Telegram Error: ${data['error_code']} ${data['description']}`,
+          `Telegram Error: ${data["error_code"]} ${data["description"]}`,
           data
-        )
+        );
       }
-      return data['result']
-    })
+      return data["result"];
+    });
   }
 
   /**
@@ -81,7 +78,7 @@ class BotAPI {
    * @return {Promise<Update[]>}
    */
   getUpdates(opts = {}) {
-    return this.request('getUpdates', toSnakeCaseObject(opts))
+    return this.request("getUpdates", toSnakeCaseObject(opts));
   }
 
   /**
@@ -91,13 +88,13 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   setWebhook(url, opts = {}) {
-    let body
-    if (opts['certificate'] == null) {
-      body = toSnakeCaseObject({url}, opts)
+    let body;
+    if (opts["certificate"] == null) {
+      body = toSnakeCaseObject({url}, opts);
     } else {
-      body = toSnakeCaseFormData({url}, opts)
+      body = toSnakeCaseFormData({url}, opts);
     }
-    return this.request('setWebhook', body)
+    return this.request("setWebhook", body);
   }
 
   /**
@@ -105,7 +102,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   deleteWebhook() {
-    return this.request('deleteWebhook')
+    return this.request("deleteWebhook");
   }
 
   /**
@@ -113,7 +110,7 @@ class BotAPI {
    * @return {Promise<WebHookInfo>}
    */
   getWebhookInfo() {
-    return this.request('getWebhookInfo')
+    return this.request("getWebhookInfo");
   }
 
   /**
@@ -121,7 +118,7 @@ class BotAPI {
    * @return {Promise<User>}
    */
   getMe() {
-    return this.request('getMe')
+    return this.request("getMe");
   }
 
   /**
@@ -133,7 +130,7 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendMessage(chatID, text, opts = {}) {
-    return this.request('sendMessage', toSnakeCaseObject({chatID, text}, opts))
+    return this.request("sendMessage", toSnakeCaseObject({chatID, text}, opts));
   }
 
   /**
@@ -146,9 +143,9 @@ class BotAPI {
    */
   forwardMessage(chatID, fromChatID, messageID, opts = {}) {
     return this.request(
-      'forwardMessage',
+      "forwardMessage",
       toSnakeCaseObject({chatID, fromChatID, messageID}, opts)
-    )
+    );
   }
 
   /**
@@ -160,13 +157,13 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendPhoto(chatID, photo, opts = {}) {
-    let body
+    let body;
     if (isString(photo)) {
-      body = toSnakeCaseObject({chatID, photo}, opts)
+      body = toSnakeCaseObject({chatID, photo}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, photo}, opts)
+      body = toSnakeCaseFormData({chatID, photo}, opts);
     }
-    return this.request('sendPhoto', body)
+    return this.request("sendPhoto", body);
   }
 
   /**
@@ -179,13 +176,13 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendAudio(chatID, audio, opts = {}) {
-    let body
+    let body;
     if (isString(audio)) {
-      body = toSnakeCaseObject({chatID, audio}, opts)
+      body = toSnakeCaseObject({chatID, audio}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, audio}, opts)
+      body = toSnakeCaseFormData({chatID, audio}, opts);
     }
-    return this.request('sendAudio', body)
+    return this.request("sendAudio", body);
   }
 
   /**
@@ -198,14 +195,14 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendDocument(chatID, document, opts = {}) {
-    let body
+    let body;
     if (isString(document) &&
-        (opts['thumb'] == null || isString(opts['thumb']))) {
-      body = toSnakeCaseObject({chatID, document}, opts)
+        (opts["thumb"] == null || isString(opts["thumb"]))) {
+      body = toSnakeCaseObject({chatID, document}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, document}, opts)
+      body = toSnakeCaseFormData({chatID, document}, opts);
     }
-    return this.request('sendDocument', body)
+    return this.request("sendDocument", body);
   }
 
   /**
@@ -218,14 +215,14 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendVideo(chatID, video, opts = {}) {
-    let body
+    let body;
     if (isString(video) &&
-        (opts['thumb'] == null || isString(opts['thumb']))) {
-      body = toSnakeCaseObject({chatID, video}, opts)
+        (opts["thumb"] == null || isString(opts["thumb"]))) {
+      body = toSnakeCaseObject({chatID, video}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, video}, opts)
+      body = toSnakeCaseFormData({chatID, video}, opts);
     }
-    return this.request('sendVideo', body)
+    return this.request("sendVideo", body);
   }
 
   /**
@@ -238,14 +235,14 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendAnimation(chatID, animation, opts = {}) {
-    let body
+    let body;
     if (isString(animation) &&
-        (opts['thumb'] == null || isString(opts['thumb']))) {
-      body = toSnakeCaseObject({chatID, animation}, opts)
+        (opts["thumb"] == null || isString(opts["thumb"]))) {
+      body = toSnakeCaseObject({chatID, animation}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, animation}, opts)
+      body = toSnakeCaseFormData({chatID, animation}, opts);
     }
-    return this.request('sendAnimation', body)
+    return this.request("sendAnimation", body);
   }
 
   /**
@@ -257,13 +254,13 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendVoice(chatID, voice, opts = {}) {
-    let body
+    let body;
     if (isString(voice)) {
-      body = toSnakeCaseObject({chatID, voice}, opts)
+      body = toSnakeCaseObject({chatID, voice}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, voice}, opts)
+      body = toSnakeCaseFormData({chatID, voice}, opts);
     }
-    return this.request('sendVoice', body)
+    return this.request("sendVoice", body);
   }
 
   /**
@@ -276,14 +273,14 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendVideoNote(chatID, videoNote, opts = {}) {
-    let body
+    let body;
     if (isString(videoNote) &&
-        (opts['thumb'] == null || isString(opts['thumb']))) {
-      body = toSnakeCaseObject({chatID, videoNote}, opts)
+        (opts["thumb"] == null || isString(opts["thumb"]))) {
+      body = toSnakeCaseObject({chatID, videoNote}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, videoNote}, opts)
+      body = toSnakeCaseFormData({chatID, videoNote}, opts);
     }
-    return this.request('sendVideoNote', body)
+    return this.request("sendVideoNote", body);
   }
 
   /**
@@ -294,37 +291,37 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendMediaGroup(chatID, media, opts = {}) {
-    let body
-    const inputMedia = media
-    const outputMedia = []
-    let useFormData = false
+    let body;
+    const inputMedia = media;
+    const outputMedia = [];
+    let useFormData = false;
     for (let i = 0; i < inputMedia.length; ++i) {
-      const input = inputMedia[i]
-      const output = toSnakeCaseObject(input)
-      if (isObject(input['media'])) {
-        useFormData = true
-        opts[`input${i}`] = input['media']
-        output['media'] = `attach://input${i}`
+      const input = inputMedia[i];
+      const output = toSnakeCaseObject(input);
+      if (isObject(input["media"])) {
+        useFormData = true;
+        opts[`input${i}`] = input["media"];
+        output["media"] = `attach://input${i}`;
       }
-      if (isObject(input['thumb'])) {
-        useFormData = true
-        opts[`inputthumb${i}`] = input['thumb']
-        output['thumb'] = `attach://inputthumb${i}`
+      if (isObject(input["thumb"])) {
+        useFormData = true;
+        opts[`inputthumb${i}`] = input["thumb"];
+        output["thumb"] = `attach://inputthumb${i}`;
       }
-      outputMedia.push(output)
+      outputMedia.push(output);
     }
     if (!useFormData) {
       body = toSnakeCaseObject(
-        {chatID, 'media': JSON.stringify(outputMedia)},
+        {chatID, "media": JSON.stringify(outputMedia)},
         opts
-      )
+      );
     } else {
       body = toSnakeCaseFormData(
-        {chatID, 'media': JSON.stringify(outputMedia)},
+        {chatID, "media": JSON.stringify(outputMedia)},
         opts
-      )
+      );
     }
-    return this.request('sendMediaGroup', body)
+    return this.request("sendMediaGroup", body);
   }
 
   /**
@@ -338,9 +335,9 @@ class BotAPI {
    */
   sendLocation(chatID, latitude, longitude, opts = {}) {
     return this.request(
-      'sendLocation',
+      "sendLocation",
       toSnakeCaseObject({chatID, latitude, longitude}, opts)
-    )
+    );
   }
 
   /**
@@ -355,12 +352,12 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   editMessageLiveLocation(latitude, longitude, opts = {}) {
-    const body = toSnakeCaseObject({latitude, longitude}, opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject({latitude, longitude}, opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('editMessageLiveLocation', body)
+    return this.request("editMessageLiveLocation", body);
   }
 
   /**
@@ -373,12 +370,12 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   stopMessageLiveLocation(opts = {}) {
-    const body = toSnakeCaseObject(opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject(opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('stopMessageLiveLocation', body)
+    return this.request("stopMessageLiveLocation", body);
   }
 
   /**
@@ -394,9 +391,9 @@ class BotAPI {
    */
   sendVenue(chatID, latitude, longitude, title, address, opts = {}) {
     return this.request(
-      'sendVenue',
+      "sendVenue",
       toSnakeCaseObject({chatID, latitude, longitude, title, address}, opts)
-    )
+    );
   }
 
   /**
@@ -410,9 +407,9 @@ class BotAPI {
    */
   sendContact(chatID, phoneNumber, firstName, opts = {}) {
     return this.request(
-      'sendContact',
+      "sendContact",
       toSnakeCaseObject({chatID, phoneNumber, firstName}, opts)
-    )
+    );
   }
 
   /**
@@ -425,10 +422,10 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendPoll(chatID, question, options, opts = {}) {
-    return this.request('sendPoll', toSnakeCaseObject(
+    return this.request("sendPoll", toSnakeCaseObject(
       {chatID, question, options},
       opts
-    ))
+    ));
   }
 
   /**
@@ -439,7 +436,7 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendDice(chatID, opts = {}) {
-    return this.request('sendDice', toSnakeCaseObject({chatID}, opts))
+    return this.request("sendDice", toSnakeCaseObject({chatID}, opts));
   }
 
   /**
@@ -449,7 +446,7 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendChatAction(chatID, action) {
-    return this.request('sendChatAction', toSnakeCaseObject({chatID, action}))
+    return this.request("sendChatAction", toSnakeCaseObject({chatID, action}));
   }
 
   /**
@@ -460,9 +457,9 @@ class BotAPI {
    */
   getUserProfilePhotos(userID, opts = {}) {
     return this.request(
-      'getUserProfilePhotos',
+      "getUserProfilePhotos",
       toSnakeCaseObject({userID}, opts)
-    )
+    );
   }
 
   /**
@@ -471,7 +468,7 @@ class BotAPI {
    * @return {Promise<File>}
    */
   getFile(fileID) {
-    return this.request('getFile', toSnakeCaseObject({fileID}))
+    return this.request("getFile", toSnakeCaseObject({fileID}));
   }
 
   /**
@@ -483,9 +480,9 @@ class BotAPI {
    */
   kickChatMember(chatID, userID, opts = {}) {
     return this.request(
-      'kickChatMember',
+      "kickChatMember",
       toSnakeCaseObject({chatID, userID}, opts)
-    )
+    );
   }
 
   /**
@@ -495,7 +492,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   unbanChatMember(chatID, userID) {
-    return this.request('unbanChatMember', toSnakeCaseObject({chatID, userID}))
+    return this.request("unbanChatMember", toSnakeCaseObject({chatID, userID}));
   }
 
   /**
@@ -508,9 +505,9 @@ class BotAPI {
    */
   restrictChatMember(chatID, userID, permissions, opts = {}) {
     return this.request(
-      'restrictChatMember',
+      "restrictChatMember",
       toSnakeCaseObject({chatID, userID, permissions}, opts)
-    )
+    );
   }
 
   /**
@@ -522,9 +519,9 @@ class BotAPI {
    */
   promoteChatMember(chatID, userID, opts = {}) {
     return this.request(
-      'promoteChatMember',
+      "promoteChatMember",
       toSnakeCaseObject({chatID, userID}, opts)
-    )
+    );
   }
 
   /**
@@ -536,9 +533,9 @@ class BotAPI {
    */
   setChatAdministratorCustomTitle(chatID, userID, customTitle) {
     return this.request(
-      'setChatAdministratorCustomTitle',
+      "setChatAdministratorCustomTitle",
       toSnakeCaseObject({chatID, userID, customTitle})
-    )
+    );
   }
 
   /**
@@ -549,9 +546,9 @@ class BotAPI {
    */
   setChatPermissions(chatID, permissions) {
     return this.request(
-      'setChatPermissions',
+      "setChatPermissions",
       toSnakeCaseObject({chatID, permissions})
-    )
+    );
   }
 
   /**
@@ -560,7 +557,7 @@ class BotAPI {
    * @return {Promise<String>}
    */
   exportChatInviteLink(chatID) {
-    return this.request('exportChatInviteLink', toSnakeCaseObject({chatID}))
+    return this.request("exportChatInviteLink", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -570,7 +567,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   setChatPhoto(chatID, photo) {
-    return this.request('setChatPhoto', toSnakeCaseFormData({chatID, photo}))
+    return this.request("setChatPhoto", toSnakeCaseFormData({chatID, photo}));
   }
 
   /**
@@ -579,7 +576,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   deleteChatPhoto(chatID) {
-    return this.request('deleteChatPhoto', toSnakeCaseObject({chatID}))
+    return this.request("deleteChatPhoto", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -589,7 +586,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   setChatTitle(chatID, title) {
-    return this.request('setChatTitle', toSnakeCaseObject({chatID, title}))
+    return this.request("setChatTitle", toSnakeCaseObject({chatID, title}));
   }
 
   /**
@@ -600,9 +597,9 @@ class BotAPI {
    */
   setChatDescription(chatID, description) {
     return this.request(
-      'setChatDescription',
+      "setChatDescription",
       toSnakeCaseObject({chatID, description})
-    )
+    );
   }
 
   /**
@@ -614,9 +611,9 @@ class BotAPI {
    */
   pinChatMessage(chatID, messageID, opts = {}) {
     return this.request(
-      'pinChatMessage',
+      "pinChatMessage",
       toSnakeCaseObject({chatID, messageID}, opts)
-    )
+    );
   }
 
   /**
@@ -625,7 +622,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   unpinChatMessage(chatID) {
-    return this.request('unpinChatMessage', toSnakeCaseObject({chatID}))
+    return this.request("unpinChatMessage", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -634,7 +631,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   leaveChat(chatID) {
-    return this.request('leaveChat', toSnakeCaseObject({chatID}))
+    return this.request("leaveChat", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -643,7 +640,7 @@ class BotAPI {
    * @return {Promise<Chat>}
    */
   getChat(chatID) {
-    return this.request('getChat', toSnakeCaseObject({chatID}))
+    return this.request("getChat", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -652,7 +649,7 @@ class BotAPI {
    * @return {Promise<ChatMember[]>}
    */
   getChatAdministrators(chatID) {
-    return this.request('getChatAdministrators', toSnakeCaseObject({chatID}))
+    return this.request("getChatAdministrators", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -661,7 +658,7 @@ class BotAPI {
    * @return {Promise<Number>}
    */
   getChatMembersCount(chatID) {
-    return this.request('getChatMembersCount', toSnakeCaseObject({chatID}))
+    return this.request("getChatMembersCount", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -671,7 +668,7 @@ class BotAPI {
    * @return {Promise<ChatMember>}
    */
   getChatMember(chatID, userID) {
-    return this.request('getChatMember', toSnakeCaseObject({chatID, userID}))
+    return this.request("getChatMember", toSnakeCaseObject({chatID, userID}));
   }
 
   /**
@@ -682,9 +679,9 @@ class BotAPI {
    */
   setChatStickerSet(chatID, stickerSetName) {
     return this.request(
-      'setChatStickerSet',
+      "setChatStickerSet",
       toSnakeCaseObject({chatID, stickerSetName})
-    )
+    );
   }
 
   /**
@@ -693,7 +690,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   deleteChatStickerSet(chatID) {
-    return this.request('deleteChatStickerSet', toSnakeCaseObject({chatID}))
+    return this.request("deleteChatStickerSet", toSnakeCaseObject({chatID}));
   }
 
   /**
@@ -703,9 +700,9 @@ class BotAPI {
    */
   answerCallbackQuery(callbackQueryID, opts = {}) {
     return this.request(
-      'answerCallbackQuery',
+      "answerCallbackQuery",
       toSnakeCaseObject({callbackQueryID}, opts)
-    )
+    );
   }
 
   /**
@@ -714,7 +711,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   setMyCommands(commands) {
-    return this.request('setMyCommands', toSnakeCaseObject({commands}))
+    return this.request("setMyCommands", toSnakeCaseObject({commands}));
   }
 
   /**
@@ -722,7 +719,7 @@ class BotAPI {
    * @return {Promise<BotCommand[]>}
    */
   getMyCommands() {
-    return this.request('getMyCommands')
+    return this.request("getMyCommands");
   }
 
   /**
@@ -736,12 +733,12 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   editMessageText(text, opts = {}) {
-    const body = toSnakeCaseObject({text}, opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject({text}, opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('editMessageText', body)
+    return this.request("editMessageText", body);
   }
 
   /**
@@ -754,12 +751,12 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   editMessageCaption(opts = {}) {
-    const body = toSnakeCaseObject(opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject(opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('editMessageCaption', body)
+    return this.request("editMessageCaption", body);
   }
 
   /**
@@ -773,33 +770,33 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   editMessageMedia(media, opts = {}) {
-    let body = toSnakeCaseObject(opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    let body = toSnakeCaseObject(opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    const input = media
-    const output = toSnakeCaseObject(input)
-    let useFormData = false
-    if (isObject(input['media'])) {
-      useFormData = true
-      opts[`input${i}`] = input['media']
-      output['media'] = `attach://input${i}`
+    const input = media;
+    const output = toSnakeCaseObject(input);
+    let useFormData = false;
+    if (isObject(input["media"])) {
+      useFormData = true;
+      opts["input0"] = input["media"];
+      output["media"] = "attach://input0";
     }
-    if (isObject(input['thumb'])) {
-      useFormData = true
-      opts[`inputthumb${i}`] = input['thumb']
-      output['thumb'] = `attach://inputthumb${i}`
+    if (isObject(input["thumb"])) {
+      useFormData = true;
+      opts["inputthumb0"] = input["thumb"];
+      output["thumb"] = "attach://inputthumb0";
     }
     if (!useFormData) {
-      body = toSnakeCaseObject({chatID, 'media': JSON.stringify(output)}, opts)
+      body = toSnakeCaseObject({"media": JSON.stringify(output)}, opts);
     } else {
       body = toSnakeCaseFormData(
-        {chatID, 'media': JSON.stringify(output)},
+        {"media": JSON.stringify(output)},
         opts
-      )
+      );
     }
-    return this.request('editMessageMedia', body)
+    return this.request("editMessageMedia", body);
   }
 
   /**
@@ -812,12 +809,12 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   editMessageReplyMarkup(opts = {}) {
-    const body = toSnakeCaseObject(opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject(opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('editMessageReplyMarkup', body)
+    return this.request("editMessageReplyMarkup", body);
   }
 
   /**
@@ -830,9 +827,9 @@ class BotAPI {
    */
   stopPoll(chatID, messageID, opts = {}) {
     return this.request(
-      'stopPoll',
+      "stopPoll",
       toSnakeCaseObject({chatID, messageID}, opts)
-    )
+    );
   }
 
   /**
@@ -843,9 +840,9 @@ class BotAPI {
    */
   deleteMessage(chatID, messageID) {
     return this.request(
-      'deleteMessage',
+      "deleteMessage",
       toSnakeCaseObject({chatID, messageID})
-    )
+    );
   }
 
   /**
@@ -857,13 +854,13 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendSticker(chatID, sticker, opts = {}) {
-    let body
+    let body;
     if (isString(sticker)) {
-      body = toSnakeCaseObject({chatID, sticker}, opts)
+      body = toSnakeCaseObject({chatID, sticker}, opts);
     } else {
-      body = toSnakeCaseFormData({chatID, sticker}, opts)
+      body = toSnakeCaseFormData({chatID, sticker}, opts);
     }
-    return this.request('sendSticker', body)
+    return this.request("sendSticker", body);
   }
 
   /**
@@ -872,7 +869,7 @@ class BotAPI {
    * @return {Promise<StickerSet>}
    */
   getStickerSet(name) {
-    return this.request('getStickerSet', toSnakeCaseObject({name}))
+    return this.request("getStickerSet", toSnakeCaseObject({name}));
   }
 
   /**
@@ -883,9 +880,9 @@ class BotAPI {
    */
   uploadStickerFile(userID, pngSticker) {
     return this.request(
-      'uploadStickerFile',
+      "uploadStickerFile",
       toSnakeCaseFormData({userID, pngSticker})
-    )
+    );
   }
 
   /**
@@ -901,20 +898,20 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   createNewStickerSet(userID, name, title, pngSticker, tgsSticker, emojis, opts = {}) {
-    const parameters = {userID, name, title, emojis}
-    let body
+    const parameters = {userID, name, title, emojis};
+    let body;
     if (tgsSticker != null) {
-      parameters['tgsSticker'] = tgsSticker
+      parameters["tgsSticker"] = tgsSticker;
     }
     if (pngSticker != null) {
-      parameters['pngSticker'] = pngSticker
+      parameters["pngSticker"] = pngSticker;
     }
     if (tgsSticker != null || (pngSticker != null && !isString(pngSticker))) {
-      body = toSnakeCaseFormData(parameters, opts)
+      body = toSnakeCaseFormData(parameters, opts);
     } else {
-      body = toSnakeCaseObject(parameters, opts)
+      body = toSnakeCaseObject(parameters, opts);
     }
-    return this.request('createNewStickerSet', body)
+    return this.request("createNewStickerSet", body);
   }
 
   /**
@@ -929,20 +926,20 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   addStickerToSet(userID, name, pngSticker, tgsSticker, emojis, opts = {}) {
-    const parameters = {userID, name, emojis}
-    let body
+    const parameters = {userID, name, emojis};
+    let body;
     if (tgsSticker != null) {
-      parameters['tgsSticker'] = tgsSticker
+      parameters["tgsSticker"] = tgsSticker;
     }
     if (pngSticker != null) {
-      parameters['pngSticker'] = pngSticker
+      parameters["pngSticker"] = pngSticker;
     }
     if (tgsSticker != null || (pngSticker != null && !isString(pngSticker))) {
-      body = toSnakeCaseFormData(parameters, opts)
+      body = toSnakeCaseFormData(parameters, opts);
     } else {
-      body = toSnakeCaseObject(parameters, opts)
+      body = toSnakeCaseObject(parameters, opts);
     }
-    return this.request('addStickerToSet', body)
+    return this.request("addStickerToSet", body);
   }
 
   /**
@@ -953,9 +950,9 @@ class BotAPI {
    */
   setStickerPositionInSet(sticker, position) {
     return this.request(
-      'setStickerPositionInSet',
+      "setStickerPositionInSet",
       toSnakeCaseObject({sticker, position})
-    )
+    );
   }
 
   /**
@@ -964,7 +961,7 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   deleteStickerFromSet(sticker) {
-    return this.request('deleteStickerFromSet', toSnakeCaseObject({sticker}))
+    return this.request("deleteStickerFromSet", toSnakeCaseObject({sticker}));
   }
 
   /**
@@ -975,13 +972,13 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   setStickerSetThumb(name, userID, thumb) {
-    let body
+    let body;
     if (!isString(thumb)) {
-      body = toSnakeCaseFormData({name, userID, thumb})
+      body = toSnakeCaseFormData({name, userID, thumb});
     } else {
-      body = toSnakeCaseObject({name, userID, thumb})
+      body = toSnakeCaseObject({name, userID, thumb});
     }
-    return this.request('setStickerSetThumb', body)
+    return this.request("setStickerSetThumb", body);
   }
 
   /**
@@ -993,9 +990,9 @@ class BotAPI {
    */
   answerInlineQuery(inlineQueryID, results, opts = {}) {
     return this.request(
-      'answerInlineQuery',
+      "answerInlineQuery",
       toSnakeCaseObject({inlineQueryID, results}, opts)
-    )
+    );
   }
 
   /**
@@ -1016,10 +1013,10 @@ class BotAPI {
     chatID, title, description, payload, providerToken,
     startParameter, currency, prices, opts = {}
   ) {
-    return this.request('sendInvoice', toSnakeCaseObject(
+    return this.request("sendInvoice", toSnakeCaseObject(
       {chatID, title, description, payload, providerToken, startParameter, currency, prices},
       opts
-    ))
+    ));
   }
 
   /**
@@ -1031,11 +1028,11 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   answerShippingQuery(shippingQueryID, ok, opts = {}) {
-    const body = toSnakeCaseObject({shippingQueryID, ok}, opts)
-    if (!body['ok'] && body['error_message'] == null) {
-      throw new Error('Need `opts[\'error_message\']` when `ok` is `false`')
+    const body = toSnakeCaseObject({shippingQueryID, ok}, opts);
+    if (!body["ok"] && body["error_message"] == null) {
+      throw new Error("Need `opts['error_message']` when `ok` is `false`");
     }
-    return this.request('answerShippingQuery', body)
+    return this.request("answerShippingQuery", body);
   }
 
   /**
@@ -1046,11 +1043,11 @@ class BotAPI {
    * @return {Promise<Boolean>}
    */
   answerPreCheckoutQuery(preCheckoutQueryID, ok, opts = {}) {
-    const body = toSnakeCaseObject({preCheckoutQueryID, ok}, opts)
-    if (!body['ok'] && body['error_message'] == null) {
-      throw new Error('Need `opts[\'error_message\']` when `ok` is `false`')
+    const body = toSnakeCaseObject({preCheckoutQueryID, ok}, opts);
+    if (!body["ok"] && body["error_message"] == null) {
+      throw new Error("Need `opts['error_message']` when `ok` is `false`");
     }
-    return this.request('answerPreCheckoutQuery', body)
+    return this.request("answerPreCheckoutQuery", body);
   }
 
   /**
@@ -1061,9 +1058,9 @@ class BotAPI {
    */
   setPassportDataErrors(userID, errors) {
     return this.request(
-      'setPassportDataErrors',
+      "setPassportDataErrors",
       toSnakeCaseObject({userID, errors})
-    )
+    );
   }
 
   /**
@@ -1075,9 +1072,9 @@ class BotAPI {
    * @return {Promise<Message>}
    */
   sendGame(chatID, gameShortName, opts = {}) {
-    return this.request('sendGame', toSnakeCaseObject(
+    return this.request("sendGame", toSnakeCaseObject(
       {chatID, gameShortName}, opts
-    ))
+    ));
   }
 
   /**
@@ -1091,12 +1088,12 @@ class BotAPI {
    * @return {Promise<Message|Boolean|Error>}
    */
   setGameScore(userID, score, opts = {}) {
-    const body = toSnakeCaseObject({userID, score}, opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject({userID, score}, opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('setGameScore', body)
+    return this.request("setGameScore", body);
   }
 
   /**
@@ -1109,13 +1106,13 @@ class BotAPI {
    * @return {Promise<GameHighScore[]>}
    */
   getGameHighScores(userID, opts = {}) {
-    const body = toSnakeCaseObject({userID}, opts)
-    if (!(body['inline_message_id'] != null ||
-          (body['message_id'] != null && body['chat_id'] != null))) {
-      throw new Error('Need either `opts[\'inline_message_id\']` or both `opts[\'message_id\']` and `opts[\'chat_id\']`')
+    const body = toSnakeCaseObject({userID}, opts);
+    if (!(body["inline_message_id"] != null ||
+          (body["message_id"] != null && body["chat_id"] != null))) {
+      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
     }
-    return this.request('getGameHighScores', body)
+    return this.request("getGameHighScores", body);
   }
 }
 
-module.exports = BotAPI
+module.exports = BotAPI;
