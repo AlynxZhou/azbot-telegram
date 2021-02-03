@@ -228,7 +228,7 @@ class FormData {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/keys
    * @return {Iterator<String>}
    */
-  * keys() {
+  *keys() {
     for (const key of Object.keys(this.data)) {
       yield key;
     }
@@ -238,7 +238,7 @@ class FormData {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/values
    * @return {Iterator<(String|Buffer)>}
    */
-  * values() {
+  *values() {
     for (const value of Object.values(this.data).reduce((acc, curr) => {
       return acc.concat(curr.map((o) => {
         return o["value"];
@@ -252,7 +252,7 @@ class FormData {
    * @see https://developer.mozilla.org/zh-CN/docs/Web/API/FormData/entries
    * @return {Iterator<String, (String|Buffer)>}
    */
-  * entries() {
+  *entries() {
     for (const entries of Object.entries(this.data).reduce((acc, curr) => {
       return acc.concat(curr[1].map((o) => {
         return [curr[0], o["value"]];
