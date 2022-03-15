@@ -64,6 +64,7 @@ class BotMaster {
       if (isFunction(stopCallback)) {
         await stopCallback();
       }
+      process.exit(0);
     };
     // So we just call cleanup on SIGINT and SIGTERM to make a graceful exit.
     process.on("SIGINT", cleanup);
