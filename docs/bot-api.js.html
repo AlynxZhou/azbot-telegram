@@ -383,7 +383,10 @@ class BotAPI {
     const body = toSnakeCaseObject({latitude, longitude}, opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("editMessageLiveLocation", body);
   }
@@ -401,7 +404,10 @@ class BotAPI {
     const body = toSnakeCaseObject(opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("stopMessageLiveLocation", body);
   }
@@ -764,7 +770,10 @@ class BotAPI {
     const body = toSnakeCaseObject({text}, opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("editMessageText", body);
   }
@@ -782,7 +791,10 @@ class BotAPI {
     const body = toSnakeCaseObject(opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("editMessageCaption", body);
   }
@@ -801,7 +813,10 @@ class BotAPI {
     let body = toSnakeCaseObject(opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     const input = media;
     const output = toSnakeCaseObject(input);
@@ -840,7 +855,10 @@ class BotAPI {
     const body = toSnakeCaseObject(opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("editMessageReplyMarkup", body);
   }
@@ -925,7 +943,9 @@ class BotAPI {
    * @param {String} [opts.maskPosition] JSON-serialized MaskPosition.
    * @return {Promise&lt;Boolean>}
    */
-  createNewStickerSet(userID, name, title, pngSticker, tgsSticker, emojis, opts = {}) {
+  createNewStickerSet(
+    userID, name, title, pngSticker, tgsSticker, emojis, opts = {}
+  ) {
     const parameters = {userID, name, title, emojis};
     let body;
     if (tgsSticker != null) {
@@ -1042,7 +1062,16 @@ class BotAPI {
     startParameter, currency, prices, opts = {}
   ) {
     return this.request("sendInvoice", toSnakeCaseObject(
-      {chatID, title, description, payload, providerToken, startParameter, currency, prices},
+      {
+        chatID,
+        title,
+        description,
+        payload,
+        providerToken,
+        startParameter,
+        currency,
+        prices
+      },
       opts
     ));
   }
@@ -1119,7 +1148,10 @@ class BotAPI {
     const body = toSnakeCaseObject({userID, score}, opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("setGameScore", body);
   }
@@ -1137,7 +1169,10 @@ class BotAPI {
     const body = toSnakeCaseObject({userID}, opts);
     if (!(body["inline_message_id"] != null ||
           (body["message_id"] != null &amp;&amp; body["chat_id"] != null))) {
-      throw new Error("Need either `opts['inline_message_id']` or both `opts['message_id']` and `opts['chat_id']`");
+      throw new Error(
+        "Need either `opts['inline_message_id']` or " +
+        "both `opts['message_id']` and `opts['chat_id']`"
+      );
     }
     return this.request("getGameHighScores", body);
   }
@@ -1160,7 +1195,7 @@ module.exports = BotAPI;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Sat Aug 15 2020 17:33:23 GMT+0800 (China Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.5</a> on Wed Feb 03 2021 09:16:59 GMT+0800 (China Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

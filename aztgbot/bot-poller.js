@@ -93,7 +93,9 @@ class BotPoller {
    * @return {Number} Polling ID.
    */
   async pollUpdates() {
-    this.botLogger.debug(`poller: polling updates since offset ${this.pollingParam["offset"]}…`);
+    this.botLogger.debug(
+      `poller: polling updates since offset ${this.pollingParam["offset"]}…`
+    );
     try {
       const updates = await this.getUpdates();
       this.onUpdates(updates);
@@ -111,7 +113,9 @@ class BotPoller {
     }
     // Stop updating pollingID when stopPollUpdates() is called.
     if (this.isPolling) {
-      this.pollingID = setTimeout(this.pollUpdates.bind(this), this.pollingInterval);
+      this.pollingID = setTimeout(
+        this.pollUpdates.bind(this), this.pollingInterval
+      );
     }
     return this.pollingID;
   }

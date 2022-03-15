@@ -93,7 +93,10 @@ class BotMaster {
             this.botAPI, identifier, this.botID, this.botName
           )
         };
-        this.botLogger.debug(`${this.botName}#${this.botID}: Creating instance for identifier ${identifier}…`);
+        this.botLogger.debug(
+          `${this.botName}#${this.botID}: ` +
+          `Creating instance for identifier ${identifier}…`
+        );
         if (isFunction(this.bots[identifier]["instance"].onCreate)) {
           await this.bots[identifier]["instance"].onCreate();
         }
@@ -107,7 +110,10 @@ class BotMaster {
           if (isFunction(bot["instance"].onRemove)) {
             await bot["instance"].onRemove();
           }
-          this.botLogger.debug(`${this.botName}#${this.botID}: Removing instance for identifier ${identifier}…`);
+          this.botLogger.debug(
+            `${this.botName}#${this.botID}: " +
+            "Removing instance for identifier ${identifier}…`
+          );
           delete this.bots[identifier];
         }
       }
