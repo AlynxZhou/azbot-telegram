@@ -477,7 +477,8 @@ const toSnakeCase = (camelCase) => {
 };
 
 /**
- * @description Assign Objects into one Object which keys are all transfered into snake_case.
+ * @description Assign Objects into one Object which keys are all transfered
+ * into snake_case.
  * @param {...Object}
  * @return {Object} Assigned snake_case Object.
  */
@@ -485,14 +486,18 @@ const toSnakeCaseObject = (...objects) => {
   const result = {};
   for (const object of objects) {
     for (const entry of Object.entries(object)) {
-      result[toSnakeCase(entry[0])] = entry[1];
+      // This does not work well with circular reference, but if you use
+      // circular reference in API arguments, you are dead.
+      result[toSnakeCase(entry[0])] =
+        isObject(entry[1]) ? toSnakeCaseObject(entry[1]) : entry[1];
     }
   }
   return result;
 };
 
 /**
- * @description Assign Objects into one FormData which keys are all transfered into snake_case.
+ * @description Assign Objects into one FormData which keys are all transfered
+ * into snake_case.
  * @param {...Object}
  * @return {FormData} Assigned snake_case FormData.
  */
@@ -501,7 +506,8 @@ const toSnakeCaseFormData = (...objects) => {
   for (const object of objects) {
     for (const entry of Object.entries(object)) {
       if (isObject(entry[1])) {
-        // Append with a filename
+        // Append with a filename. We only handle file here, otherwise you
+        // should not use FormData.
         formData.append(
           toSnakeCase(entry[0]),
           entry[1]["buffer"],
