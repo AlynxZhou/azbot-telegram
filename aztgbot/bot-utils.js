@@ -311,7 +311,6 @@ class FormData {
 
 /**
  * @param {String} url Target URL.
- * @param {(String|Buffer|Object)} body Object will be JSON-serialized.
  * @param {Object} [headers]
  * @return {Promise<Buffer>}
  */
