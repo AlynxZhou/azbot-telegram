@@ -1,4 +1,4 @@
-AZBot-telegram
+AZBot-Telegram
 ==============
 
 Alynx Zhou's zero-dependency Telegram Bot API implemention.
