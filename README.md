@@ -1,19 +1,21 @@
-AZTGBot
-=======
+AZBot-telegram
+==============
 
 Alynx Zhou's zero-dependency Telegram Bot API implemention.
 -----------------------------------------------------------
 
-[![npm-version](https://img.shields.io/npm/v/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
-[![npm-downloads](https://img.shields.io/npm/dt/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
-[![node-version](https://img.shields.io/node/v/aztgbot?style=for-the-badge)](https://www.npmjs.com/package/aztgbot)
-[![github-license](https://img.shields.io/github/license/AlynxZhou/aztgbot?style=for-the-badge)](https://github.com/AlynxZhou/aztgbot/blob/master/LICENSE)
+[![npm-version](https://img.shields.io/npm/v/azbot-telegram?style=for-the-badge)](https://www.npmjs.com/package/azbot-telegram)
+[![npm-downloads](https://img.shields.io/npm/dt/azbot-telegram?style=for-the-badge)](https://www.npmjs.com/package/azbot-telegram)
+[![node-version](https://img.shields.io/node/v/azbot-telegram?style=for-the-badge)](https://www.npmjs.com/package/azbot-telegram)
+[![github-license](https://img.shields.io/github/license/AlynxZhou/azbot-telegram?style=for-the-badge)](https://github.com/AlynxZhou/azbot-telegram/blob/master/LICENSE)
 
 # Usage
 
 ```
-$ npm i -s aztgbot
+$ npm i -s azbot-telegram
 ```
+
+**NOTE**: Since v3.0.0 this package is renamed from `aztgbot` to `azbot-telegram`.
 
 # Example
 
@@ -26,7 +28,7 @@ import {
   BotAPI,
   BotLogger,
   botUtils
-} from 'aztgbot'
+} from 'azbot-telegram'
 
 class EchoBot extends BotServant {
   constructor(botAPI, identifier, botID, botName) {
@@ -64,7 +66,7 @@ import {
   BotPoller,
   BotAPI,
   botUtils
-} from 'aztgbot'
+} from 'azbot-telegram'
 
 class MediaBot {
   constructor(token) {
@@ -108,3 +110,5 @@ Apache-2.0
 # Other
 
 Docs: [Here](https://tgbot.alynx.one/)
+
+Repo: [GitHub](https://github.com/AlynxZhou/azbot-telegram/)

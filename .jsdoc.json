@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": ["aztgbot/"]
+    "include": ["azbot-telegram/"]
   },
   "plugins": ["plugins/markdown"],
   "opts": {

@@ -1,18 +1,18 @@
 {
-  "name": "aztgbot",
+  "name": "azbot-telegram",
   "version": "2.0.0",
   "description": "Alynx Zhou's zero-dependency Telegram Bot API implemention.",
   "type": "module",
-  "main": "aztgbot/index.js",
+  "main": "azbot-telegram/index.js",
   "scripts": {
     "build:doc": "jsdoc -c .jsdoc.json -R README.md && echo 'tgbot.alynx.one' > docs/CNAME && touch docs/.nojekyll && git add -A docs/ && git commit -m \"Updated docs.\"",
-    "test": "standardx aztgbot/*.js",
+    "test": "standardx azbot-telegram/*.js",
     "preversion": "npm test",
     "version": "npm run build:doc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlynxZhou/aztgbot.git"
+    "url": "git+https://github.com/AlynxZhou/azbot-telegram.git"
   },
   "keywords": [
     "Telegram",
@@ -22,9 +22,9 @@
   "author": "Alynx Zhou <alynx.zhou@gmail.com> (https://alynx.one/)",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/AlynxZhou/aztgbot/issues"
+    "url": "https://github.com/AlynxZhou/azbot-telegram/issues"
   },
-  "homepage": "https://aztgbot.alynx.one/",
+  "homepage": "https://tgbot.alynx.one/",
   "dependencies": {},
   "devDependencies": {
     "jsdoc": "^4.0.0",
