@@ -1,12 +1,10 @@
-"use strict";
-
 /**
  * @module bot-master
  */
 
-const {isFunction} = require("./bot-utils");
-const BotPoller = require("./bot-poller");
-const BotLogger = require("./bot-logger");
+import BotPoller from "./bot-poller.js";
+import BotLogger from "./bot-logger.js";
+import {isFunction} from "./bot-utils.js";
 
 /**
  * @description Create BotServant per identifier.
@@ -74,10 +72,19 @@ class BotMaster {
     if (isFunction(startCallback)) {
       await startCallback();
     }
-    const me = await this.botAPI.getMe();
-    this.botID = me["id"];
-    this.botName = me["username"];
-    this.botLogger.debug(`${this.botName}#${this.botID}: I am listening…`);
+    try {
+      const me = await this.botAPI.getMe();
+      this.botID = me["id"];
+      this.botName = me["username"];
+      this.botLogger.debug(`${this.botName}#${this.botID}: I am listening…`);
+    } catch (error) {
+      this.botLogger.warn("Failed to get bot info, exit.");
+      this.botLogger.error(error);
+      if (isFunction(stopCallback)) {
+        await stopCallback();
+      }
+      return;
+    }
     this.botPoller.startPollUpdates();
   }
 
@@ -123,4 +130,4 @@ class BotMaster {
   }
 }
 
-module.exports = BotMaster;
+export default BotMaster;

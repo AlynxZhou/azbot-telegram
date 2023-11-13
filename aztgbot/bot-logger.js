@@ -1,10 +1,8 @@
-"use strict";
-
 /**
  * @module bot-logger
  */
 
-const {isObject, isFunction} = require("./bot-utils");
+import {isObject, isFunction} from "./bot-utils.js";
 
 /**
  * @description A Logger with colored output.
@@ -138,4 +136,4 @@ class BotLogger extends console.Console {
   }
 }
 
-module.exports = BotLogger;
+export default BotLogger;

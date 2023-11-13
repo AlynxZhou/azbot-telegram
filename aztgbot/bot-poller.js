@@ -1,11 +1,9 @@
-"use strict";
-
 /**
  * @module bot-poller
  */
 
-const {isFunction} = require("./bot-utils");
-const BotLogger = require("./bot-logger");
+import BotLogger from "./bot-logger.js";
+import {isFunction} from "./bot-utils.js";
 
 /**
  * @description A Poller that automatically run `getUpdates()` and call `onUpdates()`.
@@ -54,6 +52,7 @@ class BotPoller {
         this.pollingParam["offset"] = updates[0]["update_id"] + 1;
       }
     } catch (error) {
+      this.botLogger.warn("Failed to skip updates before polling.");
       this.botLogger.error(error);
     }
   }
@@ -90,6 +89,7 @@ class BotPoller {
         this.pollingParam["offset"] = last["update_id"] + 1;
       }
     } catch (error) {
+      this.botLogger.warn("Failed to poll updates, cool down.");
       this.botLogger.error(error);
       coolDown = true;
     }
@@ -115,4 +115,4 @@ class BotPoller {
   }
 }
 
-module.exports = BotPoller;
+export default BotPoller;

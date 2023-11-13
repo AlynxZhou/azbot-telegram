@@ -1,12 +1,10 @@
-"use strict";
-
 /**
  * @module bot-utils
  */
 
-const fs = require("fs");
-const path = require("path");
-const https = require("https");
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as https from "node:https";
 
 /**
  * @description A helper class for uploading file.
@@ -405,7 +403,7 @@ const perChatID = (update) => {
  * @return {Boolean}
  */
 const isString = (o) => {
-  return typeof (o) === "string";
+  return typeof (o) === "string" || o instanceof String;
 };
 
 /**
@@ -520,7 +518,7 @@ const toSnakeCaseFormData = (...objects) => {
   return formData;
 };
 
-module.exports = {
+export {
   InputFile,
   InputMedia,
   InputMediaPhoto,

@@ -20,13 +20,13 @@ $ npm i -s aztgbot
 ## Echo Bot with BotMaster and BotServant
 
 ```JavaScript
-const {
+import {
   BotMaster,
   BotServant,
   BotAPI,
   BotLogger,
   botUtils
-} = require('aztgbot')
+} from 'aztgbot'
 
 class EchoBot extends BotServant {
   constructor(botAPI, identifier, botID, botName) {
@@ -54,18 +54,17 @@ new BotMaster(
   EchoBot,
   botUtils.perFromID,
   {'botLogger': new BotLogger(true)}
-).loop(null, null)
+).loop()
 ```
 
 ## Media Bot with BotPoller Directly
 
 ```JavaScript
-const {
+import {
   BotPoller,
   BotAPI,
-  BotLogger,
   botUtils
-} = require('aztgbot')
+} from 'aztgbot'
 
 class MediaBot {
   constructor(token) {

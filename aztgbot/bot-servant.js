@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @module bot-servant
  */
@@ -44,4 +42,4 @@ class BotServant {
   }
 }
 
-module.exports = BotServant;
+export default BotServant;

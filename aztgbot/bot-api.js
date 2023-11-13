@@ -1,10 +1,8 @@
-"use strict";
-
 /**
  * @module bot-api
  */
 
-const {
+import {
   get,
   post,
   isString,
@@ -12,7 +10,7 @@ const {
   isFormData,
   toSnakeCaseObject,
   toSnakeCaseFormData
-} = require("./bot-utils");
+} from "./bot-utils.js";
 
 /**
  * @description JavaScript implemention for Telegram Bot API.
@@ -1150,4 +1148,4 @@ class BotAPI {
   }
 }
 
-module.exports = BotAPI;
+export default BotAPI;

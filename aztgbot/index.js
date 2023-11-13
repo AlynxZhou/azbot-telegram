@@ -1,17 +1,14 @@
-"use strict";
-
 /**
  * @module bot-servant
  */
+import BotMaster from "./bot-master.js";
+import BotServant from "./bot-servant.js";
+import BotAPI from "./bot-api.js";
+import BotPoller from "./bot-poller.js";
+import BotLogger from "./bot-logger.js";
+import * as botUtils from "./bot-utils.js";
 
-const BotMaster = require("./bot-master");
-const BotServant = require("./bot-servant");
-const BotAPI = require("./bot-api");
-const BotPoller = require("./bot-poller");
-const BotLogger = require("./bot-logger");
-const botUtils = require("./bot-utils");
-
-module.exports = {
+export {
   BotMaster,
   BotServant,
   BotAPI,
