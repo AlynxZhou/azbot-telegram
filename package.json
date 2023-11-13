@@ -1,6 +1,6 @@
 {
   "name": "aztgbot",
-  "version": "1.0.12",
+  "version": "2.0.0",
   "description": "Alynx Zhou's zero-dependency Telegram Bot API implemention.",
   "type": "module",
   "main": "aztgbot/index.js",
