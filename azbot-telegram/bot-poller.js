@@ -97,7 +97,7 @@ class BotPoller {
     if (this.isPolling) {
       this.pollingID = setTimeout(
         this.pollUpdates.bind(this),
-        coolDown ? this.skippingUpdates : this.pollingInterval
+        coolDown ? this.coolDownInterval : this.pollingInterval
       );
     }
     return this.pollingID;
