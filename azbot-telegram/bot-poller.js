@@ -83,7 +83,7 @@ class BotPoller {
     let coolDown = false;
     try {
       const updates = await this.botAPI.getUpdates(this.pollingParam);
-      this.onUpdates(updates);
+      await this.onUpdates(updates);
       if (updates.length > 0) {
         const last = updates[updates.length - 1];
         this.pollingParam["offset"] = last["update_id"] + 1;

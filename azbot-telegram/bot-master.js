@@ -93,6 +93,7 @@ class BotMaster {
    * @param {Update[]} updates
    */
   async onUpdates(updates) {
+    const now = Date.now();
     for (const update of updates) {
       const identifier = this.identify(update);
       if (this.bots[identifier] == null) {
@@ -110,18 +111,18 @@ class BotMaster {
           await this.bots[identifier]["instance"].onCreate();
         }
       }
-      this.bots[identifier]["instance"].processUpdate(update);
-      this.bots[identifier]["lastActiveTime"] = Date.now();
+      await this.bots[identifier]["instance"].processUpdate(update);
+      this.bots[identifier]["lastActiveTime"] = now;
     }
     if (this.destroyTimeout != null) {
       for (const [identifier, bot] of Object.entries(this.bots)) {
-        if (Date.now() - bot["lastActiveTime"] > this.destroyTimeout) {
+        if (now - bot["lastActiveTime"] > this.destroyTimeout) {
           if (isFunction(bot["instance"].onRemove)) {
             await bot["instance"].onRemove();
           }
           this.botLogger.debug(
-            `${this.botName}#${this.botID}: " +
-            "Removing instance for identifier ${identifier}…`
+            `${this.botName}#${this.botID}: ` +
+            `Removing instance for identifier ${identifier}…`
           );
           delete this.bots[identifier];
         }
