@@ -52,7 +52,7 @@ class BotPoller {
         this.pollingParam["offset"] = updates[0]["update_id"] + 1;
       }
     } catch (error) {
-      this.botLogger.warn("Failed to skip updates before polling.");
+      this.botLogger.warn("Poller: Failed to skip updates before polling.");
       this.botLogger.error(error);
     }
   }
@@ -74,11 +74,10 @@ class BotPoller {
 
   /**
    * @private
-   * @return {Number} Polling ID.
    */
   async pollUpdates() {
     this.botLogger.debug(
-      `poller: polling updates since offset ${this.pollingParam["offset"]}…`
+      `Poller: Polling updates since offset ${this.pollingParam["offset"]}…`
     );
     let coolDown = false;
     try {
@@ -89,7 +88,7 @@ class BotPoller {
         this.pollingParam["offset"] = last["update_id"] + 1;
       }
     } catch (error) {
-      this.botLogger.warn("Failed to poll updates, cool down.");
+      this.botLogger.warn("Poller: Failed to poll updates, cool down.");
       this.botLogger.error(error);
       coolDown = true;
     }
@@ -100,7 +99,6 @@ class BotPoller {
         coolDown ? this.coolDownInterval : this.pollingInterval
       );
     }
-    return this.pollingID;
   }
 
   /**

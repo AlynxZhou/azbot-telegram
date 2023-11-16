@@ -78,7 +78,7 @@ class BotMaster {
       this.botName = me["username"];
       this.botLogger.debug(`${this.botName}#${this.botID}: I am listening…`);
     } catch (error) {
-      this.botLogger.warn("Failed to get bot info, exit.");
+      this.botLogger.warn("Master: Failed to get bot info, exit.");
       this.botLogger.error(error);
       if (isFunction(stopCallback)) {
         await stopCallback();
