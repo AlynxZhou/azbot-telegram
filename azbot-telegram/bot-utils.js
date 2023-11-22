@@ -322,15 +322,17 @@ const get = (url, headers = {}) => {
     opts["headers"][k.toLowerCase()] = v;
   }
   return new Promise((resolve, reject) => {
-    const chunks = [];
     const req = https.request(url, opts, (res) => {
+      const chunks = [];
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
       res.on("end", () => {
         resolve(Buffer.concat(chunks));
       });
-    }).on("error", reject);
+      res.on("error", reject);
+    });
+    req.on("error", reject);
     req.end();
   });
 };
@@ -356,15 +358,17 @@ const post = (url, body, headers = {}) => {
     opts["headers"]["content-length"] = `${Buffer.byteLength(body)}`;
   }
   return new Promise((resolve, reject) => {
-    const chunks = [];
     const req = https.request(url, opts, (res) => {
+      const chunks = [];
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
       res.on("end", () => {
         resolve(Buffer.concat(chunks));
       });
-    }).on("error", reject);
+      res.on("error", reject);
+    });
+    req.on("error", reject);
     req.write(body);
     req.end();
   });
