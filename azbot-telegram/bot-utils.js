@@ -5,6 +5,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as https from "node:https";
+import {Buffer} from "node:buffer";
 
 /**
  * @description A helper class for uploading file.
@@ -324,13 +325,13 @@ const get = (url, headers = {}) => {
   return new Promise((resolve, reject) => {
     const req = https.request(url, opts, (res) => {
       const chunks = [];
+      res.on("error", reject);
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
       res.on("end", () => {
         resolve(Buffer.concat(chunks));
       });
-      res.on("error", reject);
     });
     req.on("error", reject);
     req.end();
@@ -360,13 +361,13 @@ const post = (url, body, headers = {}) => {
   return new Promise((resolve, reject) => {
     const req = https.request(url, opts, (res) => {
       const chunks = [];
+      res.on("error", reject);
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
       res.on("end", () => {
         resolve(Buffer.concat(chunks));
       });
-      res.on("error", reject);
     });
     req.on("error", reject);
     req.write(body);
