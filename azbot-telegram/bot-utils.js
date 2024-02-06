@@ -314,9 +314,10 @@ class FormData {
  * @return {Promise<Buffer>}
  */
 const get = (url, headers = {}) => {
+  const timeout = 1500;
   const opts = {
     "method": "GET",
-    "timeout": 1500,
+    "timeout": timeout,
     "headers": {}
   };
   for (const [k, v] of Object.entries(headers)) {
@@ -326,6 +327,10 @@ const get = (url, headers = {}) => {
     const req = https.request(url, opts, (res) => {
       const chunks = [];
       res.on("error", reject);
+      // See <https://github.com/axios/axios/blob/main/lib/adapters/http.js#L416-L420>.
+      res.setTimeout(timeout, () => {
+        res.destory(new Error("Response Error: Timeout."));
+      });
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
@@ -334,6 +339,10 @@ const get = (url, headers = {}) => {
       });
     });
     req.on("error", reject);
+    // See <https://github.com/axios/axios/blob/main/lib/adapters/http.js#L416-L420>.
+    req.setTimeout(timeout, () => {
+      req.destory(new Error("Request Error: Timeout."));
+    });
     req.end();
   });
 };
@@ -345,9 +354,10 @@ const get = (url, headers = {}) => {
  * @return {Promise<Buffer>}
  */
 const post = (url, body, headers = {}) => {
+  const timeout = 1500;
   const opts = {
     "method": "POST",
-    "timeout": 1500,
+    "timeout": timeout,
     "headers": {}
   };
   for (const [k, v] of Object.entries(headers)) {
@@ -362,6 +372,10 @@ const post = (url, body, headers = {}) => {
     const req = https.request(url, opts, (res) => {
       const chunks = [];
       res.on("error", reject);
+      // See <https://github.com/axios/axios/blob/main/lib/adapters/http.js#L416-L420>.
+      res.setTimeout(timeout, () => {
+        res.destory(new Error("Response Error: Timeout."));
+      });
       res.on("data", (chunk) => {
         chunks.push(chunk);
       });
@@ -370,6 +384,10 @@ const post = (url, body, headers = {}) => {
       });
     });
     req.on("error", reject);
+    // See <https://github.com/axios/axios/blob/main/lib/adapters/http.js#L416-L420>.
+    req.setTimeout(timeout, () => {
+      req.destory(new Error("Request Error: Timeout."));
+    });
     req.write(body);
     req.end();
   });
